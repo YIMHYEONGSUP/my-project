@@ -2,7 +2,7 @@ package hyeong.backend.controller;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyeong.backend.Dto.Member.MemberDto;
-import hyeong.backend.Entity.Member;
+import hyeong.backend.model.Member;
 import hyeong.backend.Repository.MemberRepository;
 import hyeong.backend.aop.LogTrace.LogTraceAspect;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
