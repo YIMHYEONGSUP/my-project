@@ -1,0 +1,87 @@
+package hyeong.backend.domain.member.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import hyeong.backend.domain.member.domain.persist.Member;
+import hyeong.backend.domain.member.domain.persist.RoleType;
+import hyeong.backend.domain.member.domain.vo.*;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Slf4j
+@ApiModel
+@JsonTypeName("user")
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
+public class JoinRequestDTO {
+
+    @Valid
+    @JsonProperty("email")
+    @ApiModelProperty(example = "1234@gmail.com")
+    private UserEmail userEmail;
+
+    @Valid
+    @JsonProperty("password")
+    @ApiModelProperty(example = "1234")
+    private UserPassword userPassword;
+
+    @Valid
+    @JsonProperty("name")
+    @ApiModelProperty(example = "조세호")
+    private UserName name;
+
+    @Valid
+    @JsonProperty("nickname")
+    @ApiModelProperty(example = "(구)양배추")
+    private UserNickName nickName;
+
+    @JsonProperty("birth")
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd-MM-YYYY")
+    @ApiModelProperty(example = "24-12-1998")
+    private LocalDate birth;
+
+    @Valid
+    @JsonProperty("profile")
+    @ApiModelProperty(example = "/user/image/my_image.jpg")
+    private UserProfileImage profileImage;
+
+    private JoinRequestDTO(UserEmail userEmail, UserPassword userPassword, UserName name,
+                           UserNickName nickName, LocalDate birth, UserProfileImage profileImage) {
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.name = name;
+        this.nickName = nickName;
+        this.birth = birth;
+        this.profileImage = profileImage;
+    }
+
+    public static JoinRequestDTO from(final Member member) {
+        return new JoinRequestDTO(member.getEmail(), member.getPassword(), member.getName(), member.getNickname(),
+                member.getBirth(), member.getProfileImage());
+    }
+
+    public Member toEntity() {
+        return Member.builder()
+                .email(userEmail)
+                .password(userPassword)
+                .name(name)
+                .nickname(nickName)
+                .roleType(RoleType.USER)
+                .birth(birth)
+                .profileImage(profileImage)
+                .build();
+    }
+
+
+
+}

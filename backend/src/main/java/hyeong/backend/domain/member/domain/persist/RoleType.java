@@ -1,4 +1,5 @@
 package hyeong.backend.domain.member.domain.persist;
 
-public class RoleType {
+public enum RoleType {
+    ADMIN,USER
 }

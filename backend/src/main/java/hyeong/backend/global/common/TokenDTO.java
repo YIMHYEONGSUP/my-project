@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TokenDto {
+public class TokenDTO {
 
     @JsonProperty("accessToken")
     private AccessToken accessToken;
@@ -17,7 +17,7 @@ public class TokenDto {
     @JsonProperty("refreshToken")
     private RefreshToken refreshToken;
 
-    public static TokenDto create(final AccessToken accessToken, final RefreshToken refreshToken) {
-        return new TokenDto(accessToken, refreshToken);
+    public static TokenDTO create(final AccessToken accessToken, final RefreshToken refreshToken) {
+        return new TokenDTO(accessToken, refreshToken);
     }
 }

@@ -1,5 +1,9 @@
 package hyeong.backend.global.common;
 
+import hyeong.backend.domain.member.domain.persist.Member;
+import hyeong.backend.domain.member.domain.persist.MemberRepository;
+import hyeong.backend.domain.member.domain.vo.UserEmail;
+import hyeong.backend.domain.member.error_exception.MemberNotFoundException;
 import hyeong.backend.global.error.exception.ErrorCode;
 import hyeong.backend.global.jwt.error.UnAuthorizationException;
 import hyeong.backend.global.redis.RedisService;
@@ -17,7 +21,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -42,13 +45,13 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.accessToken-validity-in-seconds}") long accesTokenValidityInMilliseconds,
             @Value("${jwt.refreshToken-validity-in-seconds}") long refreshTokenValidityInMilliseconds,
-            Memberrepository memberrepository,
+            MemberRepository memberRepository,
             RedisService redisService
     ){
         this.secret = secret;
         this.accesTokenValidityInMilliseconds = accesTokenValidityInMilliseconds;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds;
-        this.memberrepository = memberrepository;
+        this.memberRepository = memberRepository;
         this.redisService = redisService;
     }
 
@@ -60,7 +63,7 @@ public class TokenProvider implements InitializingBean {
     }
 
 
-    public TokenDto createToken(String email, Authentication authentication) {
+    public TokenDTO createToken(String email, Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining("m"));
@@ -92,7 +95,7 @@ public class TokenProvider implements InitializingBean {
         AccessToken newAccessToken = AccessToken.from(accessToken);
         RefreshToken newRefreshToken = RefreshToken.from(refreshToken);
 
-        return TokenDto.create(newAccessToken, newRefreshToken);
+        return TokenDTO.create(newAccessToken, newRefreshToken);
 
     }
 

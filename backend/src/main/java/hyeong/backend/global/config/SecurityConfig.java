@@ -1,6 +1,7 @@
 package hyeong.backend.global.config;
 
 
+import hyeong.backend.domain.auth.details.MemberDetailServiceCustom;
 import hyeong.backend.global.common.TokenProvider;
 import hyeong.backend.global.jwt.JwtAccessDeniedHandler;
 import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
@@ -25,17 +26,17 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class SecurityConfig implements WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter  {
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final CorsFilter corsFilter;
-    private final CustomMemberDetailService customMemberDetailService;
+    private final MemberDetailServiceCustom memberDetailServiceCustom;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customMemberDetailService);
+        auth.userDetailsService(memberDetailServiceCustom);
     }
 
     @Bean

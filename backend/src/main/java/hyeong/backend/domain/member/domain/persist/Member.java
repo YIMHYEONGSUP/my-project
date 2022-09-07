@@ -44,10 +44,6 @@ public class Member extends BaseTimeEntity {
     @Embedded
     private UserProfileImage profileImage;
 
-    // 즐겨찾기 ( 사용할 지 몰라 추가 )
-    @OneToOne(mappedBy = "member")
-    private Preference preference;
-
     @Builder
     public Member(UserEmail email, UserPassword password, UserName name, RoleType roleType,
                   UserNickName nickname, LocalDate birth, UserProfileImage profileImage) {
@@ -60,10 +56,6 @@ public class Member extends BaseTimeEntity {
         this.profileImage = profileImage;
     }
 
-    // 즐겨찾기 생성자
-    public void addPreference(Preference preference) {
-        this.preference = preference;
-    }
 
     public Member update(final Member member, final PasswordEncoder encoder) {
         changeEmail(member.email);
