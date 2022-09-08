@@ -9,9 +9,7 @@ import hyeong.backend.domain.member.dto.JoinResponseDTO;
 import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.dto.MemberUpdateDTO;
 import hyeong.backend.global.common.TokenDTO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +20,11 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
+@ApiResponses({
+        @ApiResponse(code = 200, message = "Success"),
+        @ApiResponse(code = 400, message = "Bad Request"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+})
 @Api("회원 관리 API")
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
