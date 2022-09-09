@@ -12,4 +12,4 @@ I referred to this https://github.com/TravelWithMeProject/GoWithMe_Server
 test
 
 2022 09 09 fri
-test jwt -> reset
+test jwt -> reset -> reset
