@@ -1,5 +1,6 @@
 package hyeong.backend.domain.member.Repository;
 
+import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import org.springframework.data.jpa.repository.JpaRepository;

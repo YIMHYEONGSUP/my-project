@@ -1,6 +1,7 @@
 package hyeong.backend.domain.member.entity.persist;
 
 import hyeong.backend.domain.member.Repository.MemberRepository;
+import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberName;
 import hyeong.backend.domain.member.entity.vo.MemberNickName;
@@ -38,8 +39,8 @@ class MemberTest {
         MemberEmail email = newMember.getEmail();
         System.out.println("email = " + email.memberEmail());
 
-       memberService.save(newMember);
-        Member foundMember = memberService.findByEmail(MemberEmail.from("gud1313@naver.com"));
+        memberService.save(newMember);
+        MemberResponseDTO foundMember = memberService.findByEmail(MemberEmail.from("gud1313@naver.com"));
         System.out.println(foundMember.getEmail().memberEmail());
 
 

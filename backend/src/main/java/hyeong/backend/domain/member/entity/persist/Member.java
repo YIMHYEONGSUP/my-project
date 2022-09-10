@@ -1,6 +1,7 @@
 package hyeong.backend.domain.member.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberName;
 import hyeong.backend.domain.member.entity.vo.MemberNickName;
@@ -48,5 +49,13 @@ public class Member {
         this.nickname = nickname;
     }
 
+    public MemberJoinRequestDTO toJoinRequestDTO() {
+        return MemberJoinRequestDTO.builder()
+                .email(email)
+                .password(password)
+                .name(name)
+                .nickname(nickname)
+                .build();
+    }
 
 }
