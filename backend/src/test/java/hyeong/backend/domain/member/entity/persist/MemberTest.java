@@ -1,18 +1,29 @@
 package hyeong.backend.domain.member.entity.persist;
 
+import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberName;
 import hyeong.backend.domain.member.entity.vo.MemberNickName;
 import hyeong.backend.domain.member.entity.vo.MemberPassword;
+import hyeong.backend.domain.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
 
 @SpringBootTest
 @Transactional
 class MemberTest {
+
+    @Autowired
+    MemberRepository memberRepository;
+
+    @Autowired
+    MemberService memberService;
 
     @Test
     public void create() {
@@ -26,6 +37,11 @@ class MemberTest {
 
         MemberEmail email = newMember.getEmail();
         System.out.println("email = " + email.memberEmail());
+
+       memberService.save(newMember);
+        Member foundMember = memberService.findByEmail(MemberEmail.from("gud1313@naver.com"));
+        System.out.println(foundMember.getEmail().memberEmail());
+
 
     }
 
