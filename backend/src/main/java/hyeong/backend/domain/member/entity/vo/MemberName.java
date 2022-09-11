@@ -22,7 +22,7 @@ public class MemberName {
     }
 
     @JsonValue
-    public String memberName() {
+    public String name() {
         return name;
     }
 
@@ -32,12 +32,12 @@ public class MemberName {
         if(o == null || getClass() != o.getClass()) return false;
 
         MemberName memberName = (MemberName) o;
-        return Objects.equals(memberName(), memberName.name);
+        return Objects.equals(name(), memberName.name);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(memberName());
+        return Objects.hash(name());
     }
 }

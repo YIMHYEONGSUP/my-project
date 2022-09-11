@@ -6,6 +6,10 @@ import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 public interface MemberRepository extends JpaRepository<Member, Long> , MemberRepositoryCustom{
-    Member findByEmail(MemberEmail email);
+    Optional<Member> findByEmail(final MemberEmail email);
+
+    boolean existsByEmail(final MemberEmail email);
 }

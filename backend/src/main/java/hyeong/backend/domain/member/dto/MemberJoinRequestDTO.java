@@ -3,10 +3,7 @@ package hyeong.backend.domain.member.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import hyeong.backend.domain.member.entity.persist.Member;
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
-import hyeong.backend.domain.member.entity.vo.MemberName;
-import hyeong.backend.domain.member.entity.vo.MemberNickName;
-import hyeong.backend.domain.member.entity.vo.MemberPassword;
+import hyeong.backend.domain.member.entity.vo.*;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,20 +18,20 @@ import javax.validation.Valid;
 public class MemberJoinRequestDTO {
 
     @Valid
-    @JsonProperty("member_email")
+    @JsonProperty("email")
     private MemberEmail email;
 
     @Valid
-    @JsonProperty("member_password")
+    @JsonProperty("password")
     private MemberPassword password;
 
 
     @Valid
-    @JsonProperty("member_name")
+    @JsonProperty("name")
     private MemberName name;
 
     @Valid
-    @JsonProperty("member_nickname")
+    @JsonProperty("nickname")
     private MemberNickName nickname;
 
 
@@ -61,6 +58,7 @@ public class MemberJoinRequestDTO {
                 .password(password)
                 .name(name)
                 .nickname(nickname)
+                .roleType(RoleType.USER)
                 .build();
     }
 

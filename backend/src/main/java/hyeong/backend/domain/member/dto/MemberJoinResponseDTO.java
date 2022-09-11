@@ -15,13 +15,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MemberJoinResponseDTO {
 
-    @JsonProperty("member_email")
+    @JsonProperty("email")
     private MemberEmail email;
 
-    @JsonProperty("member_name")
+    @JsonProperty("name")
     private MemberName name;
 
-    @JsonProperty("member_nickname")
+    @JsonProperty("nickname")
     private MemberNickName nickName;
 
     public static MemberJoinResponseDTO from(final Member member) {

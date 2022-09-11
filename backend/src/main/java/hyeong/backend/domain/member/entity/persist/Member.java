@@ -2,18 +2,17 @@ package hyeong.backend.domain.member.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
-import hyeong.backend.domain.member.entity.vo.MemberName;
-import hyeong.backend.domain.member.entity.vo.MemberNickName;
-import hyeong.backend.domain.member.entity.vo.MemberPassword;
+import hyeong.backend.domain.member.entity.vo.*;
+import hyeong.backend.global.common.BaseTimeEntity;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @JsonIgnore
     @Id @GeneratedValue
@@ -21,32 +20,34 @@ public class Member {
     private Long id;
 
     @Embedded
-    @Column(name = "member_email")
     private MemberEmail email;
 
     @Embedded
-    @Column(name = "member_password")
     private MemberPassword password;
 
     @Embedded
-    @Column(name = "member_name")
     private MemberName name;
 
     @Embedded
-    @Column(name = "member_nickname")
     private MemberNickName nickname;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type", length = 20)
+    private RoleType roleType;
 
     @Builder
     public Member(
             MemberEmail email,
             MemberPassword password,
             MemberName name,
-            MemberNickName nickname
+            MemberNickName nickname,
+            RoleType roleType
     ) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
+        this.roleType = roleType;
     }
 
     public MemberJoinRequestDTO toJoinRequestDTO() {
@@ -58,4 +59,8 @@ public class Member {
                 .build();
     }
 
+    public Member encode(final PasswordEncoder encoder) {
+        password = MemberPassword.encode(password.password(), encoder);
+        return this;
+    }
 }

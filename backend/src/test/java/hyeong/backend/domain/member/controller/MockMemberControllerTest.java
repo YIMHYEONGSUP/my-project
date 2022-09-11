@@ -82,7 +82,7 @@ class MockMemberControllerTest {
             .build();
 
     final MemberJoinResponseDTO response = MemberJoinResponseDTO.from(member);
-    final MemberResponseDTO dto = MemberResponseDTO.from(member);
+    final MemberResponseDTO dto = MemberResponseDTO.create(member);
 
 
 
@@ -96,7 +96,7 @@ class MockMemberControllerTest {
         mockMvc.perform(post("/api/v1/join")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"member_email\":\"1234@gmail\",\"member_password\":\"1234\",\"member_name\":\"임형섭\",\"member_nickname\":\"별명\"}"))
+                .content("{\"email\":\"1234@gmail\",\"password\":\"1234\",\"name\":\"임형섭\",\"nickname\":\"별명\"}"))
                 .andDo(print())
                 .andExpect(status().isCreated());
 

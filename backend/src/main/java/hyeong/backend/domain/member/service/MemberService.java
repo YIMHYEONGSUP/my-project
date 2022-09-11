@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MemberService {
 
-    MemberJoinResponseDTO save(Member member);
+    MemberJoinResponseDTO create(Member member);
 
     MemberResponseDTO findByEmail(MemberEmail email);
 }

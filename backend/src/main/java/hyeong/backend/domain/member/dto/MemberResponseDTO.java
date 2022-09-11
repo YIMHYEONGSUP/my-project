@@ -19,13 +19,13 @@ import javax.persistence.Embedded;
 @JsonTypeName("member")
 public class MemberResponseDTO {
 
-    @JsonProperty("member_email")
+    @JsonProperty("email")
     private MemberEmail email;
 
-    @JsonProperty("member_name")
+    @JsonProperty("name")
     private MemberName name;
 
-    @JsonProperty("member_nickname")
+    @JsonProperty("nickname")
     private MemberNickName nickname;
 
     @Builder
@@ -40,7 +40,7 @@ public class MemberResponseDTO {
     }
 
 
-    public static MemberResponseDTO from(final Member member) {
+    public static MemberResponseDTO create(final Member member) {
         return new MemberResponseDTO(member.getEmail(), member.getName(),
                 member.getNickname());
     }

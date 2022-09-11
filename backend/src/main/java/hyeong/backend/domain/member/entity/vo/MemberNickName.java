@@ -20,13 +20,13 @@ public class MemberNickName {
     }
 
     @JsonValue
-    public String memberNickname() {
+    public String nickname() {
         return nickname;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(memberNickname());
+        return Objects.hash(nickname());
     }
 
     @Override
@@ -34,6 +34,6 @@ public class MemberNickName {
         if(this == o) return true;
         if(this != o || getClass() != o.getClass())return false;
         MemberNickName memberNickName = (MemberNickName) o;
-        return Objects.equals(memberNickname(), memberNickName.nickname);
+        return Objects.equals(nickname(), memberNickName.nickname);
     }
 }
