@@ -9,11 +9,13 @@ import hyeong.backend.domain.member.entity.vo.MemberNickName;
 import hyeong.backend.domain.member.entity.vo.MemberPassword;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 
 
+@Getter
 @JsonTypeName("member")
 @NoArgsConstructor
 public class MemberJoinRequestDTO {
@@ -37,7 +39,7 @@ public class MemberJoinRequestDTO {
 
 
     @Builder
-    private MemberJoinRequestDTO(
+    public MemberJoinRequestDTO(
             MemberEmail email,
             MemberPassword password,
             MemberName name,
