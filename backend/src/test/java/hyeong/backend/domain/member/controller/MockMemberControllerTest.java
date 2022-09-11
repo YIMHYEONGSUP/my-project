@@ -21,8 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,9 +31,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             excludeFilters = {
              @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)})
 @AutoConfigureMockMvc(addFilters = false)
-class MemberControllerTest {
+class MockMemberControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -94,19 +92,13 @@ class MemberControllerTest {
 
         Mockito.when(memberService.findByEmail(request.toEntity().getEmail())).thenReturn(dto);
 
-        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
-
-        info.add("email", "1234@gmail.com");
-        info.add("password", "1234");
-        info.add("name", "member1");
-        info.add("nickname","nickmember1");
-
-        // join parameter 는 email 이아니라 request member 객체이다...
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/join")
+        // responseEntity 로 반환하였기에 201 created / json -> content 로 전달
+        mockMvc.perform(post("/api/v1/join")
                 .with(csrf())
-                .params(info))
-                .andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"member_email\":\"1234@gmail\",\"member_password\":\"1234\",\"member_name\":\"임형섭\",\"member_nickname\":\"별명\"}"))
+                .andDo(print())
+                .andExpect(status().isCreated());
 
-        //"email", request.toEntity().getEmail().memberEmail()).contentType(MediaType.APPLICATION_JSON)
     }
 }
