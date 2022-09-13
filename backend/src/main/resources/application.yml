@@ -58,3 +58,11 @@ jwt:
 logging.level:
   org.hibernate.SQL: debug
   ##org.hibernate.type: trace
+
+# 서울시 공공 api 설정
+open-api:
+  seoul:
+    address: http://openapi.seoul.go.kr:8088/
+    auth-key: 47766869696775643130396941575a4d
+    type: json
+    service-name: CardSubwayTime

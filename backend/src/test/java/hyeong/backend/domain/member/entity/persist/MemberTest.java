@@ -34,11 +34,13 @@ class MemberTest {
                 .build();
 
         MemberEmail email = newMember.getEmail();
-        System.out.println("email = " + email.memberEmail());
+        System.out.println("email = " + email.email());
 
         memberService.create(newMember);
         MemberResponseDTO foundMember = memberService.findByEmail(MemberEmail.from("gud1313@naver.com"));
-        System.out.println(foundMember.getEmail().memberEmail());
+        System.out.println(foundMember.getEmail().email());
+
+
 
 
     }

@@ -20,20 +20,28 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Embedded
+    @Column(name = "member_email")
     private MemberEmail email;
 
     @Embedded
+    @Column(name = "member_password")
     private MemberPassword password;
 
     @Embedded
+    @Column(name = "member_name")
     private MemberName name;
 
     @Embedded
+    @Column(name = "member_nickname")
+    @JoinColumn
     private MemberNickName nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_type", length = 20)
     private RoleType roleType;
+
+
+
 
     @Builder
     public Member(
