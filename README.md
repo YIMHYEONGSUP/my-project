@@ -8,7 +8,7 @@ setting jpa + queryDsl + spring sercurity + jwt + redis + h2 + swagger
 
 I referred to this https://github.com/TravelWithMeProject/GoWithMe_Server
 
-2022 09 08 tur
+2022 09 08 thu
 test
 
 2022 09 09 fri
@@ -22,6 +22,10 @@ complete mock test
 
 2022 09 12 mon
 change plan open api -> simple example
+
+2022 09 13 tue
+created new entity -> market , review , manager
+
 
 
 
