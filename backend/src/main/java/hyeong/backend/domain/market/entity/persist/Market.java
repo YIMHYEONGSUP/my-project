@@ -1,59 +1,45 @@
 package hyeong.backend.domain.market.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hyeong.backend.domain.market.entity.vo.*;
-import hyeong.backend.global.common.BaseTimeEntity;
+import hyeong.backend.domain.market.entity.vo.LocationAddress;
+import hyeong.backend.domain.market.entity.vo.MarketEmail;
+import hyeong.backend.domain.market.entity.vo.MarketName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Market extends BaseTimeEntity {
+public class Market {
 
     @JsonIgnore
     @Id
     @GeneratedValue
     @Column(name = "market_id")
-    private Long id;
+    private long id;
 
     @Embedded
-    @Column(name = "market_address" )
-    private LocationAddress address;
+    private MarketName marketName;
 
     @Embedded
-    @Column(name = "market_insideCustomerCount")
-    private InsideCustomerInfo insideCustomerInfo;
+    private MarketEmail marketEmail;
 
     @Embedded
-    @Column(name = "market_outsideCustomerCount")
-    private OutSideCustomerInfo outSideCustomerInfo;
+    private LocationAddress locationAddress;
 
-    @Embedded
-    @Column(name = "market_eventList")
-    private EventList eventList;
-
+    @OneToMany(mappedBy = "market")
+    private List<Review> reviews;
 
     @Builder
-    public Market (
-//            Manager manager,
-            LocationAddress address,
-            InsideCustomerInfo insideCustomerInfo,
-            OutSideCustomerInfo outSideCustomerInfo,
-            EventList eventList
-    ) {
-//        this.manager = manager;
-        this.address = address;
-        this.insideCustomerInfo = insideCustomerInfo;
-        this.outSideCustomerInfo = outSideCustomerInfo;
-        this.eventList = eventList;
+    public Market(final MarketName marketName, MarketEmail marketEmail, LocationAddress locationAddress, List<Review> reviews) {
+        this.marketName = marketName;
+        this.marketEmail = marketEmail;
+        this.locationAddress = locationAddress;
+        this.reviews = reviews;
     }
-
-
-
-
 
 }

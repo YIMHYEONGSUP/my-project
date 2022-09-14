@@ -3,6 +3,7 @@ package hyeong.backend.domain.market.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import hyeong.backend.domain.market.entity.vo.Comments;
 import hyeong.backend.domain.market.entity.vo.Rating;
 import hyeong.backend.domain.member.entity.persist.Member;
 import lombok.*;
@@ -33,14 +34,14 @@ public class Review {
     @Enumerated(EnumType.STRING)
     private Rating rating;
 
-    private String comments;
+    private Comments comments;
 
     @Builder
     public Review(
             Market market,
             Member member,
             Rating rating,
-            String comments
+            Comments comments
     ) {
         this.market = market;
         this.member = member;

@@ -1,6 +1,7 @@
 package hyeong.backend.domain.member.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hyeong.backend.domain.market.entity.persist.Review;
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.entity.vo.*;
 import hyeong.backend.global.common.BaseTimeEntity;
@@ -8,6 +9,7 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,8 +42,8 @@ public class Member extends BaseTimeEntity {
     @Column(name = "role_type", length = 20)
     private RoleType roleType;
 
-
-
+    @OneToMany(mappedBy = "member")
+    private List<Review> reviews;
 
     @Builder
     public Member(
@@ -49,13 +51,15 @@ public class Member extends BaseTimeEntity {
             MemberPassword password,
             MemberName name,
             MemberNickName nickname,
-            RoleType roleType
+            RoleType roleType,
+            List<Review> reviews
     ) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
         this.roleType = roleType;
+        this.reviews = reviews;
     }
 
     public MemberJoinRequestDTO toJoinRequestDTO() {
