@@ -26,6 +26,11 @@ change plan open api -> simple example
 2022 09 13 tue
 created new entity -> market , review , manager
 
+2022 09 14 wed
+begin mock test cant pass test
+
+2022 09 15 thu
+practicing mock test for TDD pass the test (create , update , delete) 
 
 
 
