@@ -3,6 +3,7 @@ package hyeong.backend.domain.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyeong.backend.domain.auth.dto.LoginRequestDTO;
 import hyeong.backend.domain.auth.service.MemberAuthService;
+import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.dto.MemberJoinResponseDTO;
 import hyeong.backend.domain.member.dto.MemberResponseDTO;
@@ -12,14 +13,24 @@ import hyeong.backend.domain.member.entity.vo.MemberName;
 import hyeong.backend.domain.member.entity.vo.MemberNickName;
 import hyeong.backend.domain.member.entity.vo.MemberPassword;
 import hyeong.backend.domain.member.service.MemberService;
+import hyeong.backend.global.configs.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,11 +45,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AuthController.class)
+@WebMvcTest(controllers = AuthController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        })
 class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
 
     @Autowired
     WebApplicationContext context;
@@ -49,15 +64,22 @@ class AuthControllerTest {
     @MockBean
     private MemberAuthService memberAuthService;
 
+    @MockBean
+    private MemberRepository memberRepository;
+
+
     ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     public void setup(@Autowired WebApplicationContext context) {
+
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .apply(springSecurity())
                 .alwaysDo(print())
                 .build();
+
     }
 
     final Member member = Member.builder()
@@ -77,15 +99,13 @@ class AuthControllerTest {
     final MemberJoinResponseDTO response = MemberJoinResponseDTO.from(member);
     final MemberResponseDTO memberResponseDTO = MemberResponseDTO.create(member);
 
-
     @Test
     @WithMockUser
     public void loginTest() throws Exception {
 
         Mockito.when(memberService.create(member)).thenReturn(response);
 
-        Mockito.when(memberAuthService.authorize(member.getEmail() , member.getPassword()))
-                        .toString();
+        Mockito.when(memberAuthService.authorize(member.getEmail() , member.getPassword()));
 
 
         mockMvc.perform(post("/api/v1/members/login")

@@ -16,7 +16,7 @@ import javax.persistence.Embedded;
 
 @Getter
 @NoArgsConstructor
-@JsonTypeName("member")
+@JsonTypeName("market")
 public class MemberResponseDTO {
 
     @JsonProperty("email")

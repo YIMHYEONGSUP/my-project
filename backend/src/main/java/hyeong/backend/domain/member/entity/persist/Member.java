@@ -71,6 +71,26 @@ public class Member extends BaseTimeEntity {
                 .build();
     }
 
+    public Member update(final Member member, final PasswordEncoder encoder) {
+        changeEmail(member.email);
+        changePassword(member.password);
+        changeNickName(member.nickname);
+        encode(encoder);
+        return this;
+    }
+
+    private void changeEmail(MemberEmail email) {
+        this.email = email;
+    }
+
+    private void changePassword(MemberPassword password) {
+        this.password = password;
+    }
+
+    private void changeNickName(MemberNickName nickname) {
+        this.nickname = nickname;
+    }
+
     public Member encode(final PasswordEncoder encoder) {
         password = MemberPassword.encode(password.password(), encoder);
         return this;

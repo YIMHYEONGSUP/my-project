@@ -5,10 +5,12 @@ import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.global.common.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -20,7 +22,7 @@ public class AuthController {
     private final MemberAuthService memberAuthService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequestDTO requestDTO) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequestDTO requestDTO , HttpServletResponse response) {
 
         log.info("auth controller requestDto = {}", requestDTO);
         log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail() , requestDTO.getPassword());

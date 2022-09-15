@@ -1,5 +1,9 @@
 spring:
 
+# jpa auditing overriding
+  main:
+    allow-bean-definition-overriding: true
+
   server:
     port: 8880
     servlet:

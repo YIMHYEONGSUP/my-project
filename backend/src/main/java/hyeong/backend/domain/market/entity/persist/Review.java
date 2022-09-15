@@ -21,7 +21,7 @@ public class Review {
     @GeneratedValue
     @Column(name = "review_id")
     @JoinColumn(name = "review")
-    private long id;
+    private Long id;
 
     @ManyToOne()
     @JoinColumn(name = "market_id")

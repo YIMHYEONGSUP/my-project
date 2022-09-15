@@ -19,6 +19,10 @@ public enum ErrorCode {
     PASSWORD_NULL_ERROR(400, "M003", "올바른 비밀번호 입력이 아닙니다."),
     PASSWORD_MISS_MATCH(400, "M004", "비밀번호가 일치하지 않습니다."),
     MEMBER_NOT_FOUND(400, "M005", "해당 회원을 찾을 수 없습니다."),
+    // Market
+    MARKET_NOT_FOUND(400, "B005", "해당 마켓을 찾을 수 없습니다."),
+
+
 
     // Token, Auth
     Token_NOT_FOUND(401, "T001", "유효하지 않은 토큰입니다."),

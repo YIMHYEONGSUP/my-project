@@ -4,6 +4,7 @@ import hyeong.backend.domain.market.entity.vo.*;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 class MarketTest {
 
     @PersistenceContext
@@ -46,18 +48,23 @@ class MarketTest {
                 .comments(Comments.from("별점 5점 줄만함"))
                 .build();
 
-        ((List<Review>) new ArrayList<Review>()).add(newReview);
+        ;
+        List<Review> list = new ArrayList<>();
+        list.add(newReview);
+
 
         Market market = Market.builder()
                 .marketName(MarketName.from("가게이름"))
                 .marketEmail(MarketEmail.from("가게이메일@aa.com"))
                 .locationAddress(LocationAddress.from("부천", "중동", "201호", "12345"))
-                .reviews(new ArrayList<Review>())
+                .reviews(list)
                 .build();
+
+        log.info(market.getMarketName().name());
 
         List<Review> reviews = market.getReviews();
         for (Review review : reviews) {
-            System.out.println("review = " + review.getComments());
+            log.info("리뷰 = " + review.getComments().comments());
         }
 
     }
