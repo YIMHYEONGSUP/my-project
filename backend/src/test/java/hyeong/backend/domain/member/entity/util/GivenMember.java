@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 public class GivenMember {
 
-    public static final MemberEmail USER_EMAIL = MemberEmail.from("ilgolc@naver.com");
+    public static final MemberEmail USER_EMAIL = MemberEmail.from("gud1313@naver.com");
     public static final MemberPassword USER_PASSWORD = MemberPassword.from("1234");
-    public static final MemberName USER_NAME = MemberName.from("KIM");
+    public static final MemberName USER_NAME = MemberName.from("YIM");
     public static final RoleType ROLE_TYPE = RoleType.USER;
-    public static final MemberNickName USER_NICK_NAME = MemberNickName.from("kim1234");
+    public static final MemberNickName USER_NICK_NAME = MemberNickName.from("YIM1234");
     public static final LocalDate USER_BIRTH = LocalDate.of(1995, 11, 23);
 
 

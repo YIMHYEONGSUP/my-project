@@ -110,7 +110,7 @@ class MockMemberControllerTest {
 
     @Test
     @DisplayName("회원 수정 인수 테스트")
-    @WithMockUser(username = "ssar@naver.com", roles = "USER")
+    @WithMockUser(username = "gud1313@naver.com", roles = "USER")
     void updateMember() throws Exception {
         String body = mapper.writeValueAsString(MemberUpdateDTO.from(member));
 
@@ -129,5 +129,20 @@ class MockMemberControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("회원 조회 인수 테스트")
+    @WithMockUser(username = "ssar@naver.com", roles = "USER")
+    void findMember() throws Exception {
+        MemberResponseDTO memberResponseDTO = MemberResponseDTO.create(member);
+
+        when(memberService.findByEmail(any())).thenReturn(memberResponseDTO);
+
+        mockMvc.perform(get("/api/v1/members/findByEmail")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
 
 }

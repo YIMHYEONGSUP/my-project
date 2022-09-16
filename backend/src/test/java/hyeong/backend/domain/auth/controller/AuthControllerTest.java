@@ -1,54 +1,69 @@
 package hyeong.backend.domain.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hyeong.backend.domain.auth.config.WithMockCustomMember;
+import hyeong.backend.domain.auth.details.CustomMemberDetailService;
 import hyeong.backend.domain.auth.dto.LoginRequestDTO;
 import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.domain.member.Repository.MemberRepository;
+import hyeong.backend.domain.member.controller.MemberController;
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.dto.MemberJoinResponseDTO;
 import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.entity.persist.Member;
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
-import hyeong.backend.domain.member.entity.vo.MemberName;
-import hyeong.backend.domain.member.entity.vo.MemberNickName;
-import hyeong.backend.domain.member.entity.vo.MemberPassword;
+import hyeong.backend.domain.member.entity.util.GivenMember;
 import hyeong.backend.domain.member.service.MemberService;
+import hyeong.backend.global.common.AccessToken;
+import hyeong.backend.global.common.TokenDTO;
+import hyeong.backend.global.common.TokenProvider;
 import hyeong.backend.global.configs.SecurityConfig;
-import lombok.RequiredArgsConstructor;
+import hyeong.backend.global.jwt.JwtAccessDeniedHandler;
+import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.CorsFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import javax.annotation.PostConstruct;
+
+import java.io.DataInput;
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AuthController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
-        })
+@WebMvcTest(controllers = MemberController.class
+//       , excludeFilters = {
+//                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+//       }
+)
+@Slf4j
 class AuthControllerTest {
 
     @Autowired
@@ -59,7 +74,22 @@ class AuthControllerTest {
     WebApplicationContext context;
 
     @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
+    private JwtAccessDeniedHandler accessDeniedHandler;
+
+    @MockBean
+    private TokenProvider tokenProvider;
+
+    @MockBean
     private MemberService memberService;
+
+    @MockBean
+    private CustomMemberDetailService customMemberDetailService;
+
+    @MockBean
+    private CorsFilter corsFilter;
 
     @MockBean
     private MemberAuthService memberAuthService;
@@ -70,9 +100,15 @@ class AuthControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
 
+    @PostConstruct
+    @Profile("dev")
+    public void settingUserTest() {
+        Member member = GivenMember.createMember();
+        memberRepository.save(member);
+    }
+
     @BeforeEach
     public void setup(@Autowired WebApplicationContext context) {
-
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
@@ -82,38 +118,63 @@ class AuthControllerTest {
 
     }
 
-    final Member member = Member.builder()
-            .email(MemberEmail.from("1234@gmail.com"))
-            .password(MemberPassword.from("1234"))
-            .name(MemberName.from("member1"))
-            .nickname(MemberNickName.from("nickMember1"))
-            .build();
 
-    final MemberJoinRequestDTO request = MemberJoinRequestDTO.builder()
-            .email(MemberEmail.from("1234@gmail.com"))
-            .password(MemberPassword.from("1234"))
-            .name(MemberName.from("member1"))
-            .nickname(MemberNickName.from("nickMember1"))
-            .build();
+    static Member member = GivenMember.createMember();
 
-    final MemberJoinResponseDTO response = MemberJoinResponseDTO.from(member);
-    final MemberResponseDTO memberResponseDTO = MemberResponseDTO.create(member);
+     MemberJoinRequestDTO memberJoinRequestDTO = MemberJoinRequestDTO.from(member);
+     MemberJoinResponseDTO memberJoinResponseDTO = MemberJoinResponseDTO.from(member);
+     MemberResponseDTO memberResponseDTO = MemberResponseDTO.create(member);
 
     @Test
-    @WithMockUser
+    @DisplayName("멤버 로그인 테스트")
+//    @WithMockUser(username = "gud1313@naver.com",password = "1234",roles = "USER")
+    @WithMockCustomMember   // default 값이 존재하기 때문에 위와 같은 초기화 X , authentication 값도 있음
     public void loginTest() throws Exception {
 
-        Mockito.when(memberService.create(member)).thenReturn(response);
+        LoginRequestDTO loginRequestDTO = LoginRequestDTO.builder()
+                .email(member.getEmail())
+                .password(member.getPassword())
+                .build();
 
-        Mockito.when(memberAuthService.authorize(member.getEmail() , member.getPassword()));
+        String body = mapper.writeValueAsString(loginRequestDTO);
 
+        TokenDTO tokenDTO = memberAuthService.authorize(member.getEmail(), member.getPassword());
+
+//        when(memberAuthService.authorize(any(), any())).thenReturn(tokenDTO);
+        when(memberAuthService.authorize(any(), any())).thenReturn(tokenDTO);
+        log.info("tokenDTO = {}" , tokenDTO);
+
+        MockHttpServletResponse content = mockMvc.perform(post("/api/v1/members/login")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(body)
+                        .header("Authentication", SecurityContextHolder.getContext().getAuthentication()))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn().getResponse();
+
+        MockHttpServletResponse print = mapper.readValue((DataInput) content, MockHttpServletResponse.class);
+        log.info("print = {}" , print);
+
+    }
+
+    @Test
+    @DisplayName("jwt 테스트")
+    @WithMockCustomMember
+    public void jwtTest() throws Exception {
 
         mockMvc.perform(post("/api/v1/members/login")
-                .with(csrf())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\":\"1234@gmail\",\"password\":\"1234\"}"))
-                .andDo(print())
-                .andExpect(status().isCreated());
+                        .with(csrf().asHeader()))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("jwt 테스트")
+    @WithMockCustomMember
+    public void jwtTest2() throws Exception {
+
+        MemberJoinResponseDTO mock = when(memberService.create(member)).getMock();
+
+        System.out.println("mock = " + mock.getEmail().email());
 
     }
 

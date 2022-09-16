@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class AuthController {
 
     private final MemberAuthService memberAuthService;
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequestDTO requestDTO , HttpServletResponse response) {
 
         log.info("auth controller requestDto = {}", requestDTO);
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDTO> reissue(@Valid @RequestBody TokenDTO requestToken) {
+    public ResponseEntity<TokenDTO> reissue(@Valid @RequestBody TokenDTO requestToken ) {
         return ResponseEntity.ok(memberAuthService.reissue(requestToken.getAccessToken(), requestToken.getRefreshToken()));
     }
 

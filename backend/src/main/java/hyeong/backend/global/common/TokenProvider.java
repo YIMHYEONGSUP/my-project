@@ -90,6 +90,8 @@ public class TokenProvider implements InitializingBean {
         AccessToken newAccessToken = AccessToken.from(accessToken);
         RefreshToken newRefreshToken = RefreshToken.from(refreshToken);
 
+        redisService.setBlackList(newRefreshToken.getRefreshToken() , "refreshToken", refreshTokenValidityInMilliseconds);
+
         return TokenDTO.create(newAccessToken, newRefreshToken);
     }
 

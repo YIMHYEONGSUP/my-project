@@ -11,6 +11,7 @@ import hyeong.backend.global.errors.exceptions.ErrorCode;
 import hyeong.backend.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,9 @@ public class MemberAuthService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder managerBuilder;
     private final RedisService redisService;
+
+    @Value("${jwt.refreshToken-validity-in-seconds}")
+    private long refreshTokenValidityInMilliseconds;
 
     public TokenDTO authorize(final MemberEmail memberEmail, final MemberPassword memberPassword) {
         final String email = memberEmail.email();

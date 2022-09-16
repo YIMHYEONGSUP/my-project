@@ -7,17 +7,28 @@ import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberPassword;
 import lombok.*;
 
+import javax.validation.Valid;
+
 @Getter
 @JsonTypeName("member")
-//@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT , use = JsonTypeInfo.Id.NAME)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class LoginRequestDTO {
 
+    @Valid
     @JsonProperty("email")
     private MemberEmail email;
 
+    @Valid
     @JsonProperty("password")
     private MemberPassword password;
 
+
+    @Builder
+    public LoginRequestDTO(
+            MemberEmail email,
+            MemberPassword password
+    ) {
+        this.email = email;
+        this.password = password;
+    }
 }

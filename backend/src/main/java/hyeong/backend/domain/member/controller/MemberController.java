@@ -2,6 +2,7 @@ package hyeong.backend.domain.member.controller;
 
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.dto.MemberJoinResponseDTO;
+import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.dto.MemberUpdateDTO;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
@@ -59,8 +60,16 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/findByEmail")
+    @ApiOperation(value = "회원 조회", notes = "회원 정보를 보여주는 API")
+    public ResponseEntity<MemberResponseDTO> findByEmail() {
+        return ResponseEntity.ok(memberService.findByEmail(MemberEmail.from(getEmail())));
+    }
+
     private String getEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
+
 
 }
