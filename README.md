@@ -4,7 +4,7 @@
 vue + spring setting
 
 2022 09 07 wed
-setting jpa + queryDsl + spring sercurity + jwt + redis + h2 + swagger
+setting jpa + queryDsl + spring security + jwt + redis + h2 + swagger
 
 I reffernced this https://github.com/TravelWithMeProject/GoWithMe_Server
 
