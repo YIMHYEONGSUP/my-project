@@ -32,5 +32,6 @@ begin mock test cant pass test
 2022 09 15 thu
 practicing mock test for TDD pass the test (create , update , delete) 
 
-
+2022 09 16 fri
+complete postman test (create , login , reissue , delete)
 
