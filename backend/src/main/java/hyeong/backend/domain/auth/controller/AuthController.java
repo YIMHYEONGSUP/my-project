@@ -5,7 +5,6 @@ import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.global.common.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class AuthController {
         log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail() , requestDTO.getPassword());
 
         return new ResponseEntity<>(
-                memberAuthService.authorize(requestDTO.getEmail(), requestDTO.getPassword()), HttpStatus.OK);
+                memberAuthService.login(requestDTO.getEmail(), requestDTO.getPassword()), HttpStatus.OK);
     }
 
     @PostMapping("/reissue")

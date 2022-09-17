@@ -8,6 +8,7 @@ import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;
 import hyeong.backend.global.jwt.exceptions.TokenNotFoundException;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
+import hyeong.backend.global.jwt.exceptions.UnAuthorizationException;
 import hyeong.backend.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class MemberAuthService {
     @Value("${jwt.refreshToken-validity-in-seconds}")
     private long refreshTokenValidityInMilliseconds;
 
-    public TokenDTO authorize(final MemberEmail memberEmail, final MemberPassword memberPassword) {
+    public TokenDTO login (final MemberEmail memberEmail, final MemberPassword memberPassword) {
         final String email = memberEmail.email();
         final String password = memberPassword.password();
 
@@ -53,12 +54,17 @@ public class MemberAuthService {
 
     }
 
-    public TokenDTO reissue(AccessToken accessToken, RefreshToken refreshToken) {
-        if (!tokenProvider.validateToken(refreshToken.getRefreshToken())) {
+    public TokenDTO reissue( AccessToken accessToken, RefreshToken refreshToken) {
+
+        log.info("access check = {}" , accessToken);
+        log.info("refresh check = {}" , refreshToken);
+
+        if (!tokenProvider.validateToken(accessToken.getAccessToken())) {
             throw new TokenNotFoundException(ErrorCode.Token_NOT_FOUND);
         }
 
         Authentication authentication = tokenProvider.getAuthentication(accessToken.getAccessToken());
+
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -66,8 +72,9 @@ public class MemberAuthService {
     }
 
     public void logout(RefreshToken refreshToken, AccessToken accessToken) {
-        redisService.setBlackList(accessToken.getAccessToken(), "accessToken", 3600);
-        redisService.setBlackList(refreshToken.getRefreshToken(), "refreshToken", 1209600);
+
+        redisService.setBlackList(accessToken.getAccessToken(), 3600);
+
     }
 
 

@@ -5,6 +5,7 @@ import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.exceptions.MemberNotFoundException;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
+import hyeong.backend.global.jwt.exceptions.TokenHasBlackListException;
 import hyeong.backend.global.jwt.exceptions.UnAuthorizationException;
 import hyeong.backend.global.redis.RedisService;
 import io.jsonwebtoken.*;
@@ -61,21 +62,28 @@ public class TokenProvider implements InitializingBean {
     }
 
     public TokenDTO createToken(String email, Authentication authentication) {
+
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
 
+        Date accessTokenEXP = new Date(now + accessTokenValidityInMilliseconds);
+        Date refreshTokenEXP = new Date(now + refreshTokenValidityInMilliseconds);
+
+        long accessTokenEXPTime = accessTokenEXP.getTime();
+        long refreshTokenEXPTime = refreshTokenEXP.getTime();
+
         Member member = memberRepository.findByEmail(MemberEmail.from(email)).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.USER_NOT_FOUND);
         });
 
         String accessToken = Jwts.builder()
+                .claim(AUTHORITIES_KEY, authorities)
                 .claim("email", member.getEmail().email())
                 .claim("nickname", member.getNickname().nickname())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(new Date(now + accessTokenValidityInMilliseconds))
+                .setExpiration(accessTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
@@ -83,16 +91,13 @@ public class TokenProvider implements InitializingBean {
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("email", member.getEmail().email())
                 .claim("nickname", member.getNickname().nickname())
-                .setExpiration(new Date(now + refreshTokenValidityInMilliseconds))
+                .setExpiration(refreshTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        AccessToken newAccessToken = AccessToken.from(accessToken);
-        RefreshToken newRefreshToken = RefreshToken.from(refreshToken);
+        redisService.setRefreshToken(refreshToken , refreshTokenEXPTime);
 
-        redisService.setBlackList(newRefreshToken.getRefreshToken() , "refreshToken", refreshTokenValidityInMilliseconds);
-
-        return TokenDTO.create(newAccessToken, newRefreshToken);
+        return TokenDTO.create(AccessToken.from(accessToken), RefreshToken.from(refreshToken));
     }
 
     public Authentication getAuthentication(String token) {
@@ -115,9 +120,8 @@ public class TokenProvider implements InitializingBean {
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-
             if (redisService.getBlacklist(token) != null) {
-                throw new UnAuthorizationException(ErrorCode.UN_AUTHORIZATION_ERROR);
+                throw new UnAuthorizationException(ErrorCode.TOKEN_HAS_BLACKLIST);
             }
             return true;
         } catch (SecurityException | MalformedJwtException e) {

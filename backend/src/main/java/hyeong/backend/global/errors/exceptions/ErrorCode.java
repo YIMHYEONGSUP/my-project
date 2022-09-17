@@ -27,6 +27,7 @@ public enum ErrorCode {
     // Token, Auth
     Token_NOT_FOUND(401, "T001", "유효하지 않은 토큰입니다."),
     UN_AUTHORIZATION_ERROR(401, "T002", "이미 탈퇴한 회원입니다."),
+    TOKEN_HAS_BLACKLIST(401, "T003" , "잘못된 접근 입니다."),
 
     // Favorite
     OVER_PERIOD_ERROR(400, "F001", "날짜 입력이 잘못 되었습니다."),
@@ -40,9 +41,7 @@ public enum ErrorCode {
     NO_SUCH_TIMETABLE(404, "T004", "해당 id의 TimeTable이 없습니다."),
     NO_SUCH_SCHEDULE(404, "T005", "해당 iddml Schedule이 없습니다."),
     WRONG_SCHEDULE_OWNER(400, "T005", "해당 세부 일정을 소유한 시간표 아이디가 일치하지 않습니다."),
-    NO_SUCH_MEMBER_IN_TIMETABLE(404, "T006", "해당 id의 Member가 없습니다.(시간표 관련)")
-
-            ;
+    NO_SUCH_MEMBER_IN_TIMETABLE(404, "T006", "해당 id의 Member가 없습니다.(시간표 관련)");
 
     // Mate domain
 

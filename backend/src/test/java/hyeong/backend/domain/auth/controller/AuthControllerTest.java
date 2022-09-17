@@ -13,34 +13,24 @@ import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.util.GivenMember;
 import hyeong.backend.domain.member.service.MemberService;
-import hyeong.backend.global.common.AccessToken;
 import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;
-import hyeong.backend.global.configs.SecurityConfig;
 import hyeong.backend.global.jwt.JwtAccessDeniedHandler;
 import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
+import hyeong.backend.global.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.TestExecutionEvent;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -49,7 +39,6 @@ import org.springframework.web.filter.CorsFilter;
 import javax.annotation.PostConstruct;
 
 import java.io.DataInput;
-import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -87,6 +76,9 @@ class AuthControllerTest {
 
     @MockBean
     private CustomMemberDetailService customMemberDetailService;
+
+    @MockBean
+    private RedisService redisService;
 
     @MockBean
     private CorsFilter corsFilter;
@@ -138,10 +130,10 @@ class AuthControllerTest {
 
         String body = mapper.writeValueAsString(loginRequestDTO);
 
-        TokenDTO tokenDTO = memberAuthService.authorize(member.getEmail(), member.getPassword());
+        TokenDTO tokenDTO = memberAuthService.login(member.getEmail(), member.getPassword());
 
 //        when(memberAuthService.authorize(any(), any())).thenReturn(tokenDTO);
-        when(memberAuthService.authorize(any(), any())).thenReturn(tokenDTO);
+        when(memberAuthService.login(any(), any())).thenReturn(tokenDTO);
         log.info("tokenDTO = {}" , tokenDTO);
 
         MockHttpServletResponse content = mockMvc.perform(post("/api/v1/members/login")
@@ -175,6 +167,17 @@ class AuthControllerTest {
         MemberJoinResponseDTO mock = when(memberService.create(member)).getMock();
 
         System.out.println("mock = " + mock.getEmail().email());
+
+    }
+
+    @Value("${jwt.refreshToken-validity-in-seconds}")
+    private long refresh_second;
+
+    @Test
+    @DisplayName("Redis 테스트")
+    @WithMockCustomMember
+    public void redisJwt() throws Exception {
+
 
     }
 
