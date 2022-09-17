@@ -35,3 +35,5 @@ practicing mock test for TDD pass the test (create , update , delete)
 2022 09 16 fri
 complete postman test (create , login , reissue , delete)
 
+2022 09 17 sat
+complete test login flow ( login -> reissue -> logout -> reissue ( failure ) -> login ( success )
