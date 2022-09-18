@@ -1,6 +1,8 @@
 package hyeong.backend.domain.market.repository;
 
-public interface MarketRepositoryCustom {
+import org.springframework.stereotype.Repository;
 
+@Repository
+public interface MarketRepositoryCustom {
 
 }
