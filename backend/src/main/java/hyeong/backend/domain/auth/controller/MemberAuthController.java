@@ -1,6 +1,6 @@
 package hyeong.backend.domain.auth.controller;
 
-import hyeong.backend.domain.auth.dto.LoginRequestDTO;
+import hyeong.backend.domain.auth.dto.MemberLoginRequestDTO;
 import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.global.common.TokenDTO;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ import javax.validation.Valid;
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 @Slf4j
-public class AuthController {
+public class MemberAuthController {
 
     private final MemberAuthService memberAuthService;
 
     @PostMapping(value = "/login" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequestDTO requestDTO , HttpServletResponse response) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody MemberLoginRequestDTO requestDTO , HttpServletResponse response) {
 
         log.info("auth controller requestDto = {}", requestDTO);
         log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail() , requestDTO.getPassword());

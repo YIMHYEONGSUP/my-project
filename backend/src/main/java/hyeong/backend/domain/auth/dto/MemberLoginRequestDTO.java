@@ -1,7 +1,6 @@
 package hyeong.backend.domain.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberPassword;
@@ -12,7 +11,7 @@ import javax.validation.Valid;
 @Getter
 @JsonTypeName("member")
 @NoArgsConstructor
-public class LoginRequestDTO {
+public class MemberLoginRequestDTO {
 
     @Valid
     @JsonProperty("email")
@@ -24,7 +23,7 @@ public class LoginRequestDTO {
 
 
     @Builder
-    public LoginRequestDTO(
+    public MemberLoginRequestDTO(
             MemberEmail email,
             MemberPassword password
     ) {

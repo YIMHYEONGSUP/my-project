@@ -41,6 +41,7 @@ public class MarketServiceImpl implements MarketService {
         if (marketRepository.existsByEmail(market.getEmail())) {
             throw new DuplicateEmailException(ErrorCode.EMAIL_DUPLICATION);
         }
+        market.get
 
         return MarketJoinResponseDTO.from(marketRepository.save(market));
     }

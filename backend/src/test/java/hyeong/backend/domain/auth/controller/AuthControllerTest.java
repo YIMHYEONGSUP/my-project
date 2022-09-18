@@ -3,7 +3,7 @@ package hyeong.backend.domain.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyeong.backend.domain.auth.config.WithMockCustomMember;
 import hyeong.backend.domain.auth.details.CustomMemberDetailService;
-import hyeong.backend.domain.auth.dto.LoginRequestDTO;
+import hyeong.backend.domain.auth.dto.MemberLoginRequestDTO;
 import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.controller.MemberController;
@@ -123,7 +123,7 @@ class AuthControllerTest {
     @WithMockCustomMember   // default 값이 존재하기 때문에 위와 같은 초기화 X , authentication 값도 있음
     public void loginTest() throws Exception {
 
-        LoginRequestDTO loginRequestDTO = LoginRequestDTO.builder()
+        MemberLoginRequestDTO loginRequestDTO = MemberLoginRequestDTO.builder()
                 .email(member.getEmail())
                 .password(member.getPassword())
                 .build();

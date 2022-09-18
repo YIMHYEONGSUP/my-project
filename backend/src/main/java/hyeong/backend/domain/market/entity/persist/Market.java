@@ -1,6 +1,7 @@
 package hyeong.backend.domain.market.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
 import hyeong.backend.domain.market.entity.vo.*;
 import lombok.Builder;
@@ -36,6 +37,10 @@ public class Market {
     @Embedded
     @Column(name = "market_address")
     private TemporarilyAddress locationAddress;
+
+    @OneToMany(mappedBy = "market")
+    @Column(name = "market_item")
+    private List<Item> items;
 
     @OneToMany(mappedBy = "market")
     @Column(name = "market_reviews")
