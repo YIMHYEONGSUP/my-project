@@ -37,3 +37,6 @@ complete postman test (create , login , reissue , delete)
 
 2022 09 17 sat
 complete test login flow ( login -> reissue -> logout -> reissue ( failure ) -> login ( success )
+
+2022 09 18 sun
+complete market mock test
