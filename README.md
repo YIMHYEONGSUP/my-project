@@ -1,5 +1,8 @@
 # my-project
 
+# ERD DIAGRAM
+https://www.erdcloud.com/p/vd3hiFJaTLxQQwoyY
+
 2022 09 06 tue 
 vue + spring setting
 
