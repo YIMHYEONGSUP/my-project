@@ -2,8 +2,6 @@ package hyeong.backend.domain.auth.service;
 
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.entity.vo.MarketPassword;
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
-import hyeong.backend.domain.member.entity.vo.MemberPassword;
 import hyeong.backend.global.common.AccessToken;
 import hyeong.backend.global.common.RefreshToken;
 import hyeong.backend.global.common.TokenDTO;
@@ -52,7 +50,7 @@ public class MarketAuthService {
         log.debug("authentication.principal : {}", authentication.getPrincipal());
         log.debug("authentication.authorities : {}", authentication.getAuthorities());
 
-        return tokenProvider.createToken(authentication.getName(), authentication);
+        return tokenProvider.createTokenMember(authentication.getName(), authentication);
 
     }
 
@@ -70,7 +68,7 @@ public class MarketAuthService {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createToken(principal.getUsername(), authentication);
+        return tokenProvider.createTokenMember(principal.getUsername(), authentication);
     }
 
     public void logout(RefreshToken refreshToken, AccessToken accessToken) {

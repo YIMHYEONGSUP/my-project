@@ -1,11 +1,14 @@
 package hyeong.backend.global.common;
 
+import hyeong.backend.domain.market.entity.persist.Market;
+import hyeong.backend.domain.market.entity.vo.MarketEmail;
+import hyeong.backend.domain.market.exceptions.MarketNotFoundException;
+import hyeong.backend.domain.market.repository.MarketRepository;
 import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.exceptions.MemberNotFoundException;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
-import hyeong.backend.global.jwt.exceptions.TokenHasBlackListException;
 import hyeong.backend.global.jwt.exceptions.UnAuthorizationException;
 import hyeong.backend.global.redis.RedisService;
 import io.jsonwebtoken.*;
@@ -40,6 +43,8 @@ public class TokenProvider implements InitializingBean {
     private final RedisService redisService;
     private final MemberRepository memberRepository;
 
+    private final MarketRepository marketRepository;
+
     private Key key;
 
     public TokenProvider(
@@ -47,12 +52,13 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.accessToken-validity-in-seconds}") long accessTokenValidityInMilliseconds,
             @Value("${jwt.refreshToken-validity-in-seconds}") long refreshTokenValidityInMilliseconds,
             MemberRepository memberRepository,
-            RedisService redisService) {
+            RedisService redisService, MarketRepository marketRepository) {
         this.secret = secret;
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds * 1000;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
         this.memberRepository = memberRepository;
         this.redisService = redisService;
+        this.marketRepository = marketRepository;
     }
 
     @Override
@@ -61,7 +67,7 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDTO createToken(String email, Authentication authentication) {
+    public TokenDTO createTokenMember(String email, Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -91,6 +97,44 @@ public class TokenProvider implements InitializingBean {
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("email", member.getEmail().email())
                 .claim("nickname", member.getNickname().nickname())
+                .setExpiration(refreshTokenEXP)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        redisService.setRefreshToken(refreshToken , refreshTokenEXPTime);
+
+        return TokenDTO.create(AccessToken.from(accessToken), RefreshToken.from(refreshToken));
+    }
+ public TokenDTO createTokenMarket(String email, Authentication authentication) {
+
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = (new Date()).getTime();
+
+        Date accessTokenEXP = new Date(now + accessTokenValidityInMilliseconds);
+        Date refreshTokenEXP = new Date(now + refreshTokenValidityInMilliseconds);
+
+        long accessTokenEXPTime = accessTokenEXP.getTime();
+        long refreshTokenEXPTime = refreshTokenEXP.getTime();
+
+     Market market = marketRepository.findByEmail(MarketEmail.from(email)).orElseThrow(() -> {
+         throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
+     });
+
+        String accessToken = Jwts.builder()
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("email", market.getEmail().email())
+                .claim("name", market.getName().name())
+                .setExpiration(accessTokenEXP)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        String refreshToken = Jwts.builder()
+                .claim(AUTHORITIES_KEY, authorities)
+                .claim("email", market.getEmail().email())
+                .claim("name", market.getName().name())
                 .setExpiration(refreshTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();

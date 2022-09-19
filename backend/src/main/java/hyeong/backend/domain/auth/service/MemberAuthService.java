@@ -8,7 +8,6 @@ import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;
 import hyeong.backend.global.jwt.exceptions.TokenNotFoundException;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
-import hyeong.backend.global.jwt.exceptions.UnAuthorizationException;
 import hyeong.backend.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +49,7 @@ public class MemberAuthService {
         log.debug("authentication.principal : {}", authentication.getPrincipal());
         log.debug("authentication.authorities : {}", authentication.getAuthorities());
 
-        return tokenProvider.createToken(authentication.getName(), authentication);
+        return tokenProvider.createTokenMember(authentication.getName(), authentication);
 
     }
 
@@ -68,7 +67,7 @@ public class MemberAuthService {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createToken(principal.getUsername(), authentication);
+        return tokenProvider.createTokenMember(principal.getUsername(), authentication);
     }
 
     public void logout(RefreshToken refreshToken, AccessToken accessToken) {

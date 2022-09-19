@@ -50,6 +50,8 @@ public class Market {
     @Column(name = "market_event_list")
     private EventList eventList;
 
+
+/*  테이블
     @Embedded
     @Column(name = "market_inside_customer_info")
     private InsideCustomerInfo insideCustomerInfo;
@@ -57,14 +59,14 @@ public class Market {
     @Embedded
     @Column(name = "market_outside_customer_info")
     private OutSideCustomerInfo outSideCustomerInfo;
+*/
 
     @Builder
     public Market(
             final MarketName name,final MarketEmail email,
             final MarketPassword password,
             final TemporarilyAddress locationAddress, final List<Review> reviews,
-            final EventList eventList , final InsideCustomerInfo insideCustomerInfo,
-            final OutSideCustomerInfo outSideCustomerInfo
+            final EventList eventList
     ) {
         this.name = name;
         this.email = email;
@@ -72,8 +74,6 @@ public class Market {
         this.locationAddress = locationAddress;
         this.reviews = reviews;
         this.eventList = eventList;
-        this.insideCustomerInfo = insideCustomerInfo;
-        this.outSideCustomerInfo = outSideCustomerInfo;
     }
 
 
@@ -92,6 +92,10 @@ public class Market {
         changeNickName(market.name);
         encode(encoder);
         return this;
+    }
+
+    private void init(){
+
     }
 
     private void changeEmail(MarketEmail email) {
