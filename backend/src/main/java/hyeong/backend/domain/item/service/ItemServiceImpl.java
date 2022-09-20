@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ItemServiceImpl implements ItemService{
 
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
     @Override
     public ItemRegisterResponseDTO create(Item item) {

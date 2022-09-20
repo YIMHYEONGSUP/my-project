@@ -43,6 +43,8 @@ public class MarketAuthService {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
+        log.info("authentication Token = {}" , authenticationToken.getPrincipal().toString());
+
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -50,7 +52,7 @@ public class MarketAuthService {
         log.debug("authentication.principal : {}", authentication.getPrincipal());
         log.debug("authentication.authorities : {}", authentication.getAuthorities());
 
-        return tokenProvider.createTokenMember(authentication.getName(), authentication);
+        return tokenProvider.createTokenMarket(authentication.getName(), authentication);
 
     }
 
@@ -68,7 +70,7 @@ public class MarketAuthService {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createTokenMember(principal.getUsername(), authentication);
+        return tokenProvider.createTokenMarket(principal.getUsername(), authentication);
     }
 
     public void logout(RefreshToken refreshToken, AccessToken accessToken) {

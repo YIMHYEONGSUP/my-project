@@ -11,7 +11,7 @@ import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.dto.MemberJoinResponseDTO;
 import hyeong.backend.domain.member.dto.MemberResponseDTO;
 import hyeong.backend.domain.member.entity.persist.Member;
-import hyeong.backend.domain.member.entity.util.GivenMember;
+import hyeong.backend.global.given.GivenMember;
 import hyeong.backend.domain.member.service.MemberService;
 import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;

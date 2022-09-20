@@ -1,7 +1,8 @@
-package hyeong.backend.domain.item;
+package hyeong.backend.global.given;
 
 import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.item.entity.vo.*;
+import hyeong.backend.domain.market.entity.persist.Market;
 
 public class GivenItem {
 
@@ -15,5 +16,9 @@ public class GivenItem {
                 .itemPrice(ItemPrice.from(13000L))
                 .itemQuantity(ItemQuantity.from(100L))
                 .build();
+    }
+
+    public static void registerMarket (Market market) {
+        Item.builder().market(market);
     }
 }

@@ -1,4 +1,4 @@
-package hyeong.backend.domain.member.entity.util;
+package hyeong.backend.global.given;
 
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.*;

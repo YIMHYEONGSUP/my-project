@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/v1/markets")
+@RequestMapping("/api/v1/market")
 @RequiredArgsConstructor
 @Slf4j
 public class MarketAuthController {

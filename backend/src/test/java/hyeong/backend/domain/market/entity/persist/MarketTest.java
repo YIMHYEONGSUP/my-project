@@ -3,6 +3,7 @@ package hyeong.backend.domain.market.entity.persist;
 import hyeong.backend.domain.market.entity.vo.*;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.*;
+import hyeong.backend.global.common.vo.LocationAddress;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -56,7 +57,7 @@ class MarketTest {
         Market market = Market.builder()
                 .name(MarketName.from("가게이름"))
                 .email(MarketEmail.from("가게이메일@aa.com"))
-                .locationAddress(TemporarilyAddress.from("임시주소"))
+                .locationAddress(LocationAddress.from("부천","중동","집주소","12345"))
                 .reviews(list)
                 .build();
 

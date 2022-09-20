@@ -1,14 +1,12 @@
 package hyeong.backend.domain.market.repository;
 
-import hyeong.backend.domain.market.GivenMarket;
+import hyeong.backend.global.given.GivenMarket;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.persist.Review;
 import hyeong.backend.domain.market.entity.vo.*;
-import hyeong.backend.domain.market.repository.MarketRepository;
-import hyeong.backend.domain.market.repository.ReviewRepository;
 import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.entity.persist.Member;
-import hyeong.backend.domain.member.entity.util.GivenMember;
+import hyeong.backend.global.given.GivenMember;
 import hyeong.backend.global.TestConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

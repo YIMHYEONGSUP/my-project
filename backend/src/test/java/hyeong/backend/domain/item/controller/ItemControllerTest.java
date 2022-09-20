@@ -1,13 +1,11 @@
 package hyeong.backend.domain.item.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyeong.backend.domain.item.GivenItem;
+import hyeong.backend.global.given.GivenItem;
 import hyeong.backend.domain.item.dto.ItemRegisterRequestDTO;
 import hyeong.backend.domain.item.dto.ItemRegisterResponseDTO;
 import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.item.service.ItemService;
-import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
-import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
 import hyeong.backend.global.configs.SecurityConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,13 +23,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ItemController.class
 ,excludeFilters = {

@@ -3,10 +3,9 @@ package hyeong.backend.domain.market.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import hyeong.backend.domain.market.entity.persist.Market;
-import hyeong.backend.domain.market.entity.vo.LocationAddress;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.entity.vo.MarketName;
-import hyeong.backend.domain.market.entity.vo.TemporarilyAddress;
+import hyeong.backend.global.common.vo.LocationAddress;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,13 +22,13 @@ public class MarketResponseDTO {
     private MarketEmail email;
 
     @JsonProperty("locationAddress")
-    private TemporarilyAddress locationAddress;
+    private LocationAddress locationAddress;
 
     @Builder
     public MarketResponseDTO(
             MarketName name,
             MarketEmail email,
-            TemporarilyAddress locationAddress
+            LocationAddress locationAddress
     ) {
         this.name = name;
         this.email = email;

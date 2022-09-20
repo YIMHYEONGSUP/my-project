@@ -1,11 +1,11 @@
-package hyeong.backend.domain.market.entity.vo;
+package hyeong.backend.global.common.vo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import hyeong.backend.domain.member.entity.vo.MemberName;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 @NoArgsConstructor

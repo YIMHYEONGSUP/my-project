@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Review {
+public class  Review {
 
     @JsonIgnore
     @Id
@@ -23,7 +23,7 @@ public class Review {
     @JoinColumn(name = "review")
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "market_id")
     private Market market;
 

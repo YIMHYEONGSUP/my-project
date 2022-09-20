@@ -1,9 +1,12 @@
 package hyeong.backend.domain.market.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hyeong.backend.domain.event.entity.persist.Event;
 import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
 import hyeong.backend.domain.market.entity.vo.*;
+import hyeong.backend.domain.member.entity.vo.RoleType;
+import hyeong.backend.global.common.vo.LocationAddress;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +26,14 @@ public class Market {
     @Column(name = "market_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type", length = 20)
+    private RoleType roleType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "market_status")
+    private MarketStatus status;
+
     @Embedded
     @Column(name = "market_name")
     private MarketName name;
@@ -36,7 +47,7 @@ public class Market {
     private MarketPassword password;
     @Embedded
     @Column(name = "market_address")
-    private TemporarilyAddress locationAddress;
+    private LocationAddress locationAddress;
 
     @OneToMany(mappedBy = "market")
     @Column(name = "market_item")
@@ -46,9 +57,9 @@ public class Market {
     @Column(name = "market_reviews")
     private List<Review> reviews;
 
-    @Embedded
-    @Column(name = "market_event_list")
-    private EventList eventList;
+    @OneToMany(mappedBy = "market")
+    @Column(name = "market_events")
+    private List<Event> events;
 
 
 /*  테이블
@@ -63,17 +74,20 @@ public class Market {
 
     @Builder
     public Market(
-            final MarketName name,final MarketEmail email,
-            final MarketPassword password,
-            final TemporarilyAddress locationAddress, final List<Review> reviews,
-            final EventList eventList
+            final RoleType roleType, final MarketStatus status,
+           final MarketName name,
+            final MarketEmail email, final MarketPassword password,
+            final LocationAddress locationAddress, final List<Review> reviews,
+            final List<Event> events
     ) {
+        this.roleType = roleType;
+        this.status = status;
         this.name = name;
         this.email = email;
         this.password = password;
         this.locationAddress = locationAddress;
         this.reviews = reviews;
-        this.eventList = eventList;
+        this.events = events;
     }
 
 

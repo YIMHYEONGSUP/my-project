@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberAuthController {

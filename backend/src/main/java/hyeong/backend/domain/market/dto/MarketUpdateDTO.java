@@ -10,6 +10,7 @@ import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberNickName;
 import hyeong.backend.domain.member.entity.vo.MemberPassword;
+import hyeong.backend.global.common.vo.LocationAddress;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AccessLevel;
@@ -39,10 +40,10 @@ public class MarketUpdateDTO {
 
     @JsonProperty("locationAddress")
     @ApiModelProperty(example = "서울 , 강남 , ㅇㅇ빌딩 , 12345")
-    private TemporarilyAddress locationAddress;
+    private LocationAddress locationAddress;
 
 
-    private MarketUpdateDTO(MarketEmail email, MarketPassword password, MarketName name , TemporarilyAddress locationAddress){
+    private MarketUpdateDTO(MarketEmail email, MarketPassword password, MarketName name , LocationAddress locationAddress){
         this.email = email;
         this.password = password;
         this.name = name;

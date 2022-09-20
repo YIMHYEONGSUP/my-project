@@ -47,6 +47,7 @@ public class Item {
 
     @Builder
     public Item(
+            Market market,
             ItemCategory itemCategory,
             ItemCode itemCode,
             ItemStatus itemStatus,
@@ -54,6 +55,7 @@ public class Item {
             ItemPrice itemPrice,
             ItemQuantity itemQuantity
     ) {
+        this.market = market;
         this.itemCategory = itemCategory;
         this.itemCode = itemCode;
         this.itemStatus = itemStatus;

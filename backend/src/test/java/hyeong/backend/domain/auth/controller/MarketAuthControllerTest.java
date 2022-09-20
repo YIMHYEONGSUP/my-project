@@ -1,11 +1,9 @@
 package hyeong.backend.domain.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyeong.backend.domain.auth.config.WithMockCustomerMarket;
 import hyeong.backend.domain.auth.dto.MarketLoginRequestDTO;
 import hyeong.backend.domain.auth.service.MarketAuthService;
-import hyeong.backend.domain.market.GivenMarket;
-import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
+import hyeong.backend.global.given.GivenMarket;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.entity.vo.MarketPassword;
@@ -21,13 +19,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
