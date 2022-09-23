@@ -1,6 +1,6 @@
 package hyeong.backend.global.configs;
 
-import hyeong.backend.domain.auth.details.CustomMemberDetailService;
+import hyeong.backend.domain.event.dto.auth.details.CustomMemberDetailService;
 import hyeong.backend.global.common.TokenProvider;
 import hyeong.backend.global.jwt.JwtAccessDeniedHandler;
 import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
@@ -8,11 +8,9 @@ import hyeong.backend.global.jwt.JwtSecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;

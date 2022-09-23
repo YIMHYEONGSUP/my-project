@@ -1,5 +1,6 @@
 package hyeong.backend.domain.market.service;
 
+import hyeong.backend.domain.market.dto.MarketJoinRequestDTOSerialize;
 import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
 import hyeong.backend.domain.market.dto.MarketResponseDTO;
 import hyeong.backend.domain.market.entity.persist.Market;

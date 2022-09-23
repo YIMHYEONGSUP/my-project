@@ -1,5 +1,6 @@
 package hyeong.backend.domain.market.service;
 
+import hyeong.backend.domain.market.dto.MarketJoinRequestDTOSerialize;
 import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
 import hyeong.backend.domain.market.dto.MarketResponseDTO;
 import hyeong.backend.domain.market.entity.persist.Market;
@@ -9,6 +10,7 @@ import hyeong.backend.domain.market.repository.MarketRepository;
 import hyeong.backend.domain.member.exceptions.DuplicateEmailException;
 import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;
+import hyeong.backend.global.common.vo.LocationAddress;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,8 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public MarketJoinResponseDTO create(Market market) {
+
+        log.info("location info = {}" , market.getLocationAddress().city());
 
         market.encode(encoder);
 

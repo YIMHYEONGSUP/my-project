@@ -5,7 +5,7 @@ import hyeong.backend.domain.event.entity.persist.Event;
 import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
 import hyeong.backend.domain.market.entity.vo.*;
-import hyeong.backend.domain.member.entity.vo.RoleType;
+import hyeong.backend.global.common.vo.RoleType;
 import hyeong.backend.global.common.vo.LocationAddress;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class Market {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_type", length = 20)
+    @Column(name = "market_role_type", length = 20)
     private RoleType roleType;
 
     @Enumerated(EnumType.STRING)
@@ -46,10 +46,10 @@ public class Market {
     @Column(name = "market_password")
     private MarketPassword password;
     @Embedded
-    @Column(name = "market_address")
+    @Column(name = "market_location_address")
     private LocationAddress locationAddress;
 
-    @OneToMany(mappedBy = "market")
+    @OneToMany(mappedBy = "market" , cascade = CascadeType.PERSIST)
     @Column(name = "market_item")
     private List<Item> items;
 
@@ -90,15 +90,6 @@ public class Market {
         this.events = events;
     }
 
-
-    public MarketJoinRequestDTO toJoinRequestDTO() {
-        return MarketJoinRequestDTO.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .locationAddress(locationAddress)
-                .build();
-    }
 
     public Market update(final Market market, final PasswordEncoder encoder) {
         changeEmail(market.email);

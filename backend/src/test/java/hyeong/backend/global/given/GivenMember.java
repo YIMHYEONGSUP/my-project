@@ -2,6 +2,7 @@ package hyeong.backend.global.given;
 
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.*;
+import hyeong.backend.global.common.vo.RoleType;
 
 import java.time.LocalDate;
 

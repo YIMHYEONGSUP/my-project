@@ -1,8 +1,9 @@
 package hyeong.backend.domain.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyeong.backend.domain.auth.dto.MarketLoginRequestDTO;
-import hyeong.backend.domain.auth.service.MarketAuthService;
+import hyeong.backend.domain.event.dto.auth.controller.MarketAuthController;
+import hyeong.backend.domain.event.dto.auth.dto.MarketLoginRequestDTO;
+import hyeong.backend.domain.event.dto.auth.service.MarketAuthService;
 import hyeong.backend.global.given.GivenMarket;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;

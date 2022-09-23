@@ -1,4 +1,4 @@
-package hyeong.backend.domain.member.entity.vo;
+package hyeong.backend.global.common.vo;
 
 public enum RoleType {
     ADMIN,USER,MARKET

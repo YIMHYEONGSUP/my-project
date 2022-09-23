@@ -1,9 +1,6 @@
 package hyeong.backend.domain.market.controller;
 
-import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
-import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
-import hyeong.backend.domain.market.dto.MarketResponseDTO;
-import hyeong.backend.domain.market.dto.MarketUpdateDTO;
+import hyeong.backend.domain.market.dto.*;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.service.MarketService;
@@ -39,11 +36,11 @@ public class MarketController {
     @PostMapping
     @ApiParam(name = "마켓 회원 가입 데이터 전달 DTO")
     @ApiOperation(value = " 마켓 회원 가입", notes = " 마켓 회원 정보를 입력받아 저장한다.")
-    public ResponseEntity<MarketJoinResponseDTO> join(@Valid @RequestBody MarketJoinRequestDTO requestDTO) {
+    public ResponseEntity<MarketJoinResponseDTO> join(
+            @Valid@RequestBody MarketJoinRequestDTOSerialize requestDTO
+    ) {
 
-        log.info("controller request = {}" , requestDTO.getEmail());
         Market market = requestDTO.toEntity();
-        log.info("controller member = {}" , market.getEmail());
 
         URI createMarketURI = URI.create(String.format("/api/v1/markets/%d", market.getId()));
         return ResponseEntity.created(createMarketURI).body(marketService.create(market));

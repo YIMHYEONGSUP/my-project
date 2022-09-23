@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.Valid;
 
 @Getter
@@ -22,6 +24,7 @@ public class ItemRegisterResponseDTO {
     private ItemCode itemCode;
 
     @JsonProperty("status")
+    @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
 
     @JsonProperty("name")

@@ -5,6 +5,7 @@ import hyeong.backend.domain.market.entity.persist.Review;
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
 import hyeong.backend.domain.member.entity.vo.*;
 import hyeong.backend.global.common.BaseTimeEntity;
+import hyeong.backend.global.common.vo.RoleType;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

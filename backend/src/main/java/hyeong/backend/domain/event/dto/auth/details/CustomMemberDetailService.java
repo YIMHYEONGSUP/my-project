@@ -1,9 +1,5 @@
-package hyeong.backend.domain.auth.details;
+package hyeong.backend.domain.event.dto.auth.details;
 
-import hyeong.backend.domain.market.entity.persist.Market;
-import hyeong.backend.domain.market.entity.vo.MarketEmail;
-import hyeong.backend.domain.market.exceptions.MarketNotFoundException;
-import hyeong.backend.domain.market.repository.MarketRepository;
 import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
@@ -25,23 +21,23 @@ import java.util.Collections;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomMarketDetailService implements UserDetailsService {
+public class CustomMemberDetailService implements UserDetailsService {
 
-    private final MarketRepository marketRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return marketRepository.findByEmail(MarketEmail.from(email))
+        return memberRepository.findByEmail(MemberEmail.from(email))
                 .map(this::createdUserDetails)
-                .orElseThrow(() -> new MarketNotFoundException((ErrorCode.MARKET_NOT_FOUND)));
+                .orElseThrow(() -> new MemberNotFoundException((ErrorCode.MEMBER_NOT_FOUND)));
     }
 
-    private UserDetails createdUserDetails(Market market) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + market.getRoleType());
+    private UserDetails createdUserDetails(Member member) {
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + member.getRoleType());
 
-        return new User(market.getEmail().email(),
-                market.getPassword().password(),
+        return new User(member.getEmail().email(),
+                member.getPassword().password(),
                 Collections.singleton(grantedAuthority));
 
     }
