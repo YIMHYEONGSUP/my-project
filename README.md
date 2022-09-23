@@ -1,5 +1,8 @@
 # my-project
 
+# ERD DIAGRAM
+https://www.erdcloud.com/p/vd3hiFJaTLxQQwoyY
+
 2022 09 06 tue 
 vue + spring setting
 
@@ -35,3 +38,8 @@ practicing mock test for TDD pass the test (create , update , delete)
 2022 09 16 fri
 complete postman test (create , login , reissue , delete)
 
+2022 09 17 sat
+complete test login flow ( login -> reissue -> logout -> reissue ( failure ) -> login ( success )
+
+2022 09 18 sun
+complete market mock test
