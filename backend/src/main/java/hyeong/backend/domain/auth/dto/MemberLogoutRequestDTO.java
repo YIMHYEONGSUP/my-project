@@ -1,4 +1,4 @@
-package hyeong.backend.domain.event.dto.auth.dto;
+package hyeong.backend.domain.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;

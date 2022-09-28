@@ -1,13 +1,13 @@
-package hyeong.backend.domain.event.dto.auth.service;
+package hyeong.backend.domain.auth.service;
 
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
-import hyeong.backend.domain.member.entity.vo.MemberPassword;
+import hyeong.backend.domain.market.entity.vo.MarketEmail;
+import hyeong.backend.domain.market.entity.vo.MarketPassword;
 import hyeong.backend.global.common.AccessToken;
 import hyeong.backend.global.common.RefreshToken;
 import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;
-import hyeong.backend.global.jwt.exceptions.TokenNotFoundException;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
+import hyeong.backend.global.jwt.exceptions.TokenNotFoundException;
 import hyeong.backend.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberAuthService {
+public class MarketAuthService {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder managerBuilder;
@@ -33,14 +33,17 @@ public class MemberAuthService {
     @Value("${jwt.refreshToken-validity-in-seconds}")
     private long refreshTokenValidityInMilliseconds;
 
-    public TokenDTO login (final MemberEmail memberEmail, final MemberPassword memberPassword) {
-        final String email = memberEmail.email();
-        final String password = memberPassword.password();
+    public TokenDTO login (final MarketEmail marketEmail, final MarketPassword marketPassword) {
+
+        final String email = marketEmail.email();
+        final String password = marketPassword.password();
 
         log.info("email = {}" , email);
         log.info("password = {}" , password);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        log.info("authentication Token = {}" , authenticationToken.getPrincipal().toString());
 
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
@@ -49,11 +52,11 @@ public class MemberAuthService {
         log.debug("authentication.principal : {}", authentication.getPrincipal());
         log.debug("authentication.authorities : {}", authentication.getAuthorities());
 
-        return tokenProvider.createTokenMember(authentication.getName(), authentication);
+        return tokenProvider.createTokenMarket(authentication.getName(), authentication);
 
     }
 
-    public TokenDTO reissue( AccessToken accessToken, RefreshToken refreshToken) {
+    public TokenDTO reissue(AccessToken accessToken, RefreshToken refreshToken) {
 
         log.info("access check = {}" , accessToken);
         log.info("refresh check = {}" , refreshToken);
@@ -67,7 +70,7 @@ public class MemberAuthService {
         UserDetails principal = (UserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createTokenMember(principal.getUsername(), authentication);
+        return tokenProvider.createTokenMarket(principal.getUsername(), authentication);
     }
 
     public void logout(RefreshToken refreshToken, AccessToken accessToken) {
@@ -75,7 +78,4 @@ public class MemberAuthService {
         redisService.setBlackList(accessToken.getAccessToken(), 3600);
 
     }
-
-
-
 }

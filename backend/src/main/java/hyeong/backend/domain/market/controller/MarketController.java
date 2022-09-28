@@ -26,7 +26,7 @@ import java.net.URI;
 
 @Api("마켓 관리 Api")
 @RestController
-@RequestMapping("/api/v1/market")
+@RequestMapping("/market")
 @RequiredArgsConstructor
 @Slf4j
 public class MarketController {

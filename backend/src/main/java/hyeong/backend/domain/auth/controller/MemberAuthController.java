@@ -1,7 +1,7 @@
-package hyeong.backend.domain.event.dto.auth.controller;
+package hyeong.backend.domain.auth.controller;
 
-import hyeong.backend.domain.event.dto.auth.dto.MemberLoginRequestDTO;
-import hyeong.backend.domain.event.dto.auth.service.MemberAuthService;
+import hyeong.backend.domain.auth.dto.MemberLoginRequestDTO;
+import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.global.common.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberAuthController {
@@ -26,6 +26,8 @@ public class MemberAuthController {
 
         log.info("auth controller requestDto = {}", requestDTO);
         log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail() , requestDTO.getPassword());
+
+
 
         return new ResponseEntity<>(
                 memberAuthService.login(requestDTO.getEmail(), requestDTO.getPassword()), HttpStatus.OK);

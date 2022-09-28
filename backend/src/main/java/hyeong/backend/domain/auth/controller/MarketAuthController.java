@@ -1,7 +1,7 @@
-package hyeong.backend.domain.event.dto.auth.controller;
+package hyeong.backend.domain.auth.controller;
 
-import hyeong.backend.domain.event.dto.auth.dto.MarketLoginRequestDTO;
-import hyeong.backend.domain.event.dto.auth.service.MarketAuthService;
+import hyeong.backend.domain.auth.dto.MarketLoginRequestDTO;
+import hyeong.backend.domain.auth.service.MarketAuthService;
 import hyeong.backend.global.common.TokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/v1/market")
+@RequestMapping("/market")
 @RequiredArgsConstructor
 @Slf4j
 public class MarketAuthController {

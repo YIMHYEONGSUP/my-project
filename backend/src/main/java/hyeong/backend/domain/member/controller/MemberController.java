@@ -22,7 +22,7 @@ import java.net.URI;
 
 @Api("회원 관리 Api")
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {

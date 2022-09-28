@@ -2,9 +2,9 @@ package hyeong.backend.domain.auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyeong.backend.domain.auth.config.WithMockCustomMember;
-import hyeong.backend.domain.event.dto.auth.details.CustomMemberDetailService;
-import hyeong.backend.domain.event.dto.auth.dto.MemberLoginRequestDTO;
-import hyeong.backend.domain.event.dto.auth.service.MemberAuthService;
+import hyeong.backend.domain.auth.details.CustomUserDetailsService;
+import hyeong.backend.domain.auth.dto.MemberLoginRequestDTO;
+import hyeong.backend.domain.auth.service.MemberAuthService;
 import hyeong.backend.domain.member.Repository.MemberRepository;
 import hyeong.backend.domain.member.controller.MemberController;
 import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
@@ -75,7 +75,7 @@ class AuthControllerTest {
     private MemberService memberService;
 
     @MockBean
-    private CustomMemberDetailService customMemberDetailService;
+    private CustomUserDetailsService customMemberDetailService;
 
     @MockBean
     private RedisService redisService;

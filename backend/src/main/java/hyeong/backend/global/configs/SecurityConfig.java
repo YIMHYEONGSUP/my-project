@@ -1,92 +1,98 @@
 package hyeong.backend.global.configs;
 
-import hyeong.backend.domain.event.dto.auth.details.CustomMemberDetailService;
+import hyeong.backend.domain.auth.details.CustomUserDetailsService;
 import hyeong.backend.global.common.TokenProvider;
 import hyeong.backend.global.jwt.JwtAccessDeniedHandler;
 import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
-import hyeong.backend.global.jwt.JwtSecurityConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
-@Configuration
+import static org.springframework.security.config.Customizer.withDefaults;
+
+@Slf4j
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-@Order(0)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final CorsFilter corsFilter;
-    private final CustomMemberDetailService customMemberDetailService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customMemberDetailService);
-    }
+    private final CustomUserDetailsService customMemberDetailService;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-                .antMatchers("/static/**")
-                .antMatchers("/resources/**")
-                .antMatchers("/css/**")
-                .antMatchers("/js/**")
-                .antMatchers("/h2-console") // h2로 데이터베이스 테스트
-                .antMatchers("/images/**")
-                .antMatchers("/swagger-ui/**")
-
-                // swagger
-                .antMatchers( "/v3/api-docs", "/configuration/ui", "/swagger-resources",
-                        "/configuration/security",
-                        "/swagger-ui.html", "/webjars/**","/swagger/**");
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        String[] webIgnoreList = {"/static/**","/resources/**","/css/**","/js/**","/h2-console","/images/**","/swagger-ui/**"};
+        return (web) -> web.ignoring().antMatchers(webIgnoreList);
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        String[] whiteList = {"/" , "/member/**" , "/market/**"};
+
+
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(customMemberDetailService).passwordEncoder(passwordEncoder());
+
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
+
         http
                 .cors()
                 .and()
-                .csrf()
-                .disable()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.PATCH,"/api/v1/**").permitAll()
-                .antMatchers(HttpMethod.DELETE,"/api/v1/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/v1/member/**").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                ;
+                .csrf().disable()
+
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .authenticationManager(authenticationManager)
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                .and()
+
+                .authorizeHttpRequests((authz) -> authz
+                        .antMatchers(whiteList).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(withDefaults());
 
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .apply(new MyCustomDsl(tokenProvider));
 
-        http
-                .formLogin().disable();
 
-       /* http
-                .sessionManagement()
-                .maximumSessions(3) // 세션 최대 허용 수
-                .maxSessionsPreventsLogin(false); //중복 로그인시 이전 계정 로그아웃*/
+        http.formLogin().disable();
+
+        return http.build();
+
     }
+
+
+
+
+
 }
