@@ -41,3 +41,6 @@ complete test login flow ( login -> reissue -> logout -> reissue ( failure ) -> 
 
 2022 09 18 sun
 complete market mock test
+
+2022 10 05 wed
+setting detailed vue
