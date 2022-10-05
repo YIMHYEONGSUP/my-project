@@ -55,6 +55,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private BooleanExpression marketEmailEq(String email) {
-        return StringUtils.hasText(email) ? item.market.email.eq(MarketEmail.from(email)) : null;
+        return StringUtils.hasText(email) ? item.market.marketEmail.eq(MarketEmail.from(email)) : null;
     }
 }

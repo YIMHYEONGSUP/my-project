@@ -1,6 +1,10 @@
 package hyeong.backend.domain.market.service;
 
 import hyeong.backend.domain.market.dto.*;
+import hyeong.backend.domain.market.dto.item.MarketItemListResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketJoinResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTOV2;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.global.common.TokenDTO;
@@ -22,4 +26,5 @@ public interface MarketService {
 
     Page<MarketItemListResponseDTO> marketItemList(final MarketEmail marketEmail, final Pageable pageable);
 
+    Page<MarketListResponseDTO> marketList(final LocationCondition locationCondition , final Pageable pageable);
 }

@@ -21,39 +21,39 @@ public class Market {
     @Id
     @Embedded
     @Column(name = "market_email" , unique = true , nullable = false )
-    private MarketEmail email;
+    private MarketEmail marketEmail;
 
     @Embedded
     @Column(name = "market_password")
-    private MarketPassword password;
+    private MarketPassword marketPassword;
 
     @Embedded
     @Column(name = "market_name")
-    private MarketName name;
+    private MarketName marketName;
 
     @Embedded
     @Column(name = "market_location_address")
-    private LocationAddress locationAddress;
+    private LocationAddress marketLocationAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "market_role_type", length = 20)
-    private RoleType roleType;
+    private RoleType marketRoleType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "market_status")
-    private MarketStatus status;
+    private MarketStatus marketStatus;
 
     @OneToMany(mappedBy = "market" , cascade = CascadeType.ALL)
     @Column(name = "market_item")
-    private List<Item> items;
+    private List<Item> itemList;
 
     @OneToMany(mappedBy = "market")
     @Column(name = "market_reviews")
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "market")
-    @Column(name = "market_events")
-    private List<Event> events;
+    @Column(name = "market_eventList")
+    private List<Event> eventList;
 
 
 /*  테이블
@@ -68,27 +68,27 @@ public class Market {
 
     @Builder
     public Market(
-            final RoleType roleType, final MarketStatus status,
-           final MarketName name,
-            final MarketEmail email, final MarketPassword password,
-            final LocationAddress locationAddress, final List<Review> reviews,
+            final RoleType marketRoleType, final MarketStatus marketStatus,
+           final MarketName marketName,
+            final MarketEmail marketEmail, final MarketPassword marketPassword,
+            final LocationAddress marketLocationAddress, final List<Review> reviews,
             final List<Event> events
     ) {
-        this.roleType = roleType;
-        this.status = status;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.locationAddress = locationAddress;
+        this.marketRoleType = marketRoleType;
+        this.marketStatus = marketStatus;
+        this.marketName = marketName;
+        this.marketEmail = marketEmail;
+        this.marketPassword = marketPassword;
+        this.marketLocationAddress = marketLocationAddress;
         this.reviews = reviews;
-        this.events = events;
+        this.eventList = events;
     }
 
 
     public Market update(final Market market, final PasswordEncoder encoder) {
-        changeEmail(market.email);
-        changePassword(market.password);
-        changeNickName(market.name);
+        changeEmail(market.marketEmail);
+        changePassword(market.marketPassword);
+        changeNickName(market.marketName);
         encode(encoder);
         return this;
     }
@@ -98,24 +98,24 @@ public class Market {
     }
 
     private void changeEmail(MarketEmail email) {
-        this.email = email;
+        this.marketEmail = email;
     }
 
     private void changePassword(MarketPassword password) {
-        this.password = password;
+        this.marketPassword = password;
     }
 
     private void changeNickName(MarketName name) {
-        this.name = name;
+        this.marketName = name;
     }
 
     public void prepared() {
-        this.status = MarketStatus.PREPARED;
+        this.marketStatus = MarketStatus.PREPARED;
     }
 
 
     public Market encode(final PasswordEncoder encoder) {
-        password = MarketPassword.encode(password.password(), encoder);
+        marketPassword = MarketPassword.encode(marketPassword.password(), encoder);
         return this;
     }
 

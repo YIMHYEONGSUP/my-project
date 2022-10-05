@@ -1,4 +1,4 @@
-package hyeong.backend.domain.market.dto;
+package hyeong.backend.domain.market.dto.item;
 
 import com.querydsl.core.annotations.QueryProjection;
 import hyeong.backend.domain.item.entity.vo.ItemName;

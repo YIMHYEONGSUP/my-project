@@ -1,4 +1,4 @@
-package hyeong.backend.domain.market.dto;
+package hyeong.backend.domain.market.dto.marketUser;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -57,10 +57,10 @@ public class MarketUpdateDTO {
 
     public Market toEntity() {
         return Market.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .locationAddress(locationAddress)
+                .marketEmail(email)
+                .marketPassword(password)
+                .marketName(name)
+                .marketLocationAddress(locationAddress)
                 .build();
     }
 }

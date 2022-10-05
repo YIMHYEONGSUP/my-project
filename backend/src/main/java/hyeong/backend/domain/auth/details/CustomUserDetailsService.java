@@ -34,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        return !marketRepository.findByEmail(MarketEmail.from(email)).isEmpty() ? marketRepository.findByEmail(MarketEmail.from(email))
+        return !marketRepository.findByMarketEmail(MarketEmail.from(email)).isEmpty() ? marketRepository.findByMarketEmail(MarketEmail.from(email))
                 .map(this::createdUserDetailsMarket)
                 .orElseThrow(() -> new MarketNotFoundException((ErrorCode.MARKET_NOT_FOUND))) : memberRepository.findByEmail(MemberEmail.from(email))
                 .map(this::createdUserDetailsMember)
@@ -50,10 +50,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails createdUserDetailsMarket(Market market) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + market.getRoleType());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + market.getMarketRoleType());
 
-        return new User(market.getEmail().email(),
-                market.getPassword().password(),
+        return new User(market.getMarketEmail().email(),
+                market.getMarketPassword().password(),
                 Collections.singleton(grantedAuthority));
     }
 }

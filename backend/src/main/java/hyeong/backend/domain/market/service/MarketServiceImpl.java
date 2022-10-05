@@ -1,9 +1,11 @@
 package hyeong.backend.domain.market.service;
 
-import hyeong.backend.domain.market.dto.MarketItemListResponseDTO;
-import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
-import hyeong.backend.domain.market.dto.MarketResponseDTO;
-import hyeong.backend.domain.market.dto.MarketResponseDTOV2;
+import hyeong.backend.domain.market.dto.LocationCondition;
+import hyeong.backend.domain.market.dto.MarketListResponseDTO;
+import hyeong.backend.domain.market.dto.item.MarketItemListResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketJoinResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTOV2;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.exceptions.MarketNotFoundException;
@@ -38,13 +40,13 @@ public class MarketServiceImpl implements MarketService {
     @Override
     public MarketJoinResponseDTO create(Market market) {
 
-        log.info("location info = {}" , market.getLocationAddress().city());
+        log.info("location info = {}" , market.getMarketLocationAddress().city());
 
         market.encode(encoder);
 
-        log.info("market role type = {}" , market.getRoleType());
+        log.info("market role type = {}" , market.getMarketRoleType());
 
-        if (marketRepository.existsByEmail(market.getEmail())) {
+        if (marketRepository.existsByMarketEmail(market.getMarketEmail())) {
             throw new DuplicateEmailException(ErrorCode.EMAIL_DUPLICATION);
         }
 
@@ -53,7 +55,7 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public MarketResponseDTO findByEmail(MarketEmail email) {
-        return MarketResponseDTO.create(marketRepository.findByEmail(email).orElseThrow(() -> {
+        return MarketResponseDTO.create(marketRepository.findByMarketEmail(email).orElseThrow(() -> {
             throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
         }));
     }
@@ -61,35 +63,40 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public MarketResponseDTOV2 findByEmailV2(MarketEmail email) {
-        return MarketResponseDTOV2.create(marketRepository.findByEmail(email).orElseThrow(() -> {
+        return MarketResponseDTOV2.create(marketRepository.findByMarketEmail(email).orElseThrow(() -> {
             throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
         }));
     }
 
     @Override
     public TokenDTO update(Market market, MarketEmail email) {
-        Market findMarket = marketRepository.findByEmail(email).orElseThrow(() -> {
+        Market findMarket = marketRepository.findByMarketEmail(email).orElseThrow(() -> {
             throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
         });
 
         Market updatedMarket = findMarket.update(market, encoder);
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(updatedMarket.getEmail().email(), market.getPassword().password());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(updatedMarket.getMarketEmail().email(), market.getMarketPassword().password());
 
         Authentication authentication = managerBuilder.getObject().authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createTokenMarket(updatedMarket.getEmail().email(), authentication);
+        return tokenProvider.createTokenMarket(updatedMarket.getMarketEmail().email(), authentication);
 
     }
 
     @Override
     public void delete(MarketEmail email) {
-        marketRepository.deleteByEmail(email);
+        marketRepository.deleteByMarketEmail(email);
     }
 
     @Override
     public Page<MarketItemListResponseDTO> marketItemList(MarketEmail marketEmail, Pageable pageable) {
         return marketRepository.marketItemList(marketEmail, pageable);
+    }
+
+    @Override
+    public Page<MarketListResponseDTO> marketList(LocationCondition locationCondition, Pageable pageable) {
+        return marketRepository.marketListInLocation(locationCondition, pageable);
     }
 }

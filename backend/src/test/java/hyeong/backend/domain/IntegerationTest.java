@@ -10,7 +10,7 @@ import hyeong.backend.domain.item.dto.ItemRegisterResponseDTO;
 import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.item.service.ItemService;
 import hyeong.backend.global.given.GivenMarket;
-import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketJoinResponseDTO;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.service.MarketService;
 import hyeong.backend.domain.member.dto.MemberJoinResponseDTO;
@@ -79,7 +79,7 @@ public class IntegerationTest {
 
         EventRegisterResponseDTO eventResponseDTO = eventService.createEvent(event);
         System.out.println("eventResponseDTO = " + eventResponseDTO);
-        System.out.println("eventResponseDTO.getMarket() = " + eventResponseDTO.getMarket().getName().marketName());
+        System.out.println("eventResponseDTO.getMarket() = " + eventResponseDTO.getMarket().getMarketName().marketName());
 
     }
 }

@@ -1,6 +1,11 @@
 package hyeong.backend.domain.market.controller;
 
 import hyeong.backend.domain.market.dto.*;
+import hyeong.backend.domain.market.dto.item.MarketItemListResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketJoinRequestDTOSerialize;
+import hyeong.backend.domain.market.dto.marketUser.MarketJoinResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketUpdateDTO;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.service.MarketService;
@@ -38,7 +43,7 @@ public class MarketController {
         Market market = requestDTO.toEntity();
 
 //        URI createMarketURI = URI.create(String.format("/market/%d", market.getId()));
-        URI createMarketURI = URI.create(String.format("/market/%s", market.getEmail()));
+        URI createMarketURI = URI.create(String.format("/market/%s", market.getMarketEmail()));
         return ResponseEntity.created(createMarketURI).body(marketService.create(market));
     }
 
@@ -53,7 +58,7 @@ public class MarketController {
 
         Market market = updateDTO.toEntity();
 
-        log.info("update market role type = {}" , market.getRoleType());
+        log.info("update market role type = {}" , market.getMarketRoleType());
 
         return ResponseEntity.ok(marketService.update(market, MarketEmail.from(email)));
     }
@@ -80,6 +85,7 @@ public class MarketController {
     public ResponseEntity<Page<MarketItemListResponseDTO>> itemList(
             @RequestBody MarketSearchRequestDTO requestDTO
     ) {
+        // temporarily page request
         return ResponseEntity.ok(marketService.marketItemList(requestDTO.getMarketEmail(), PageRequest.of(0, 10)));
     }
 

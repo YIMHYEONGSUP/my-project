@@ -51,13 +51,13 @@ class MarketTest {
 
 
         Market market = Market.builder()
-                .name(MarketName.from("가게이름"))
-                .email(MarketEmail.from("가게이메일@aa.com"))
-                .locationAddress(LocationAddress.from("부천","중동","집주소","12345"))
+                .marketName(MarketName.from("가게이름"))
+                .marketEmail(MarketEmail.from("가게이메일@aa.com"))
+                .marketLocationAddress(LocationAddress.from("부천","중동","집주소","12345"))
                 .reviews(list)
                 .build();
 
-        log.info(market.getName().marketName());
+        log.info(market.getMarketName().marketName());
 
         List<Review> reviews = market.getReviews();
         for (Review review : reviews) {

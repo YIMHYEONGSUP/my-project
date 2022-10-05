@@ -31,16 +31,16 @@ public class CustomMarketDetailService implements UserDetailsService {
 
 
 
-        return marketRepository.findByEmail(MarketEmail.from(email))
+        return marketRepository.findByMarketEmail(MarketEmail.from(email))
                 .map(this::createdUserDetails)
                 .orElseThrow(() -> new MarketNotFoundException((ErrorCode.MARKET_NOT_FOUND)));
     }
 
     private UserDetails createdUserDetails(Market market) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + market.getRoleType());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + market.getMarketRoleType());
 
-        return new User(market.getEmail().email(),
-                market.getPassword().password(),
+        return new User(market.getMarketEmail().email(),
+                market.getMarketPassword().password(),
                 Collections.singleton(grantedAuthority));
 
     }

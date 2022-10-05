@@ -2,11 +2,8 @@ package hyeong.backend.domain.market.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyeong.backend.domain.market.dto.MarketSearchRequestDTO;
-import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.global.given.GivenMarket;
 import hyeong.backend.domain.market.controller.MarketController;
-import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
-import hyeong.backend.domain.market.dto.MarketUpdateDTO;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.global.configs.SecurityConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,12 +23,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 
-import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(controllers = MarketController.class,
@@ -112,8 +107,8 @@ class MockMarketControllerTest {
     public void MarketItemList() throws Exception{
 
         MarketSearchRequestDTO requestDTO = MarketSearchRequestDTO.builder()
-                .marketEmail(market.getEmail())
-                .marketName(market.getName())
+                .marketEmail(market.getMarketEmail())
+                .marketName(market.getMarketName())
                 .build();
 
         String body = mapper.writeValueAsString(requestDTO);
@@ -122,7 +117,7 @@ class MockMarketControllerTest {
                         .with(csrf())
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                .andDo(print()).andReturn();
     }
 
 

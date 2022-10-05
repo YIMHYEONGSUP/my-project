@@ -122,22 +122,22 @@ public class TokenProvider implements InitializingBean {
 
         log.info("expire time = " + now + " " + refreshTokenEXPTime);
 
-     Market market = marketRepository.findByEmail(MarketEmail.from(email)).orElseThrow(() -> {
+     Market market = marketRepository.findByMarketEmail(MarketEmail.from(email)).orElseThrow(() -> {
          throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
      });
 
         String accessToken = Jwts.builder()
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim("email", market.getEmail().email())
-                .claim("name", market.getName().marketName())
+                .claim("email", market.getMarketEmail().email())
+                .claim("name", market.getMarketName().marketName())
                 .setExpiration(accessTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim("email", market.getEmail().email())
-                .claim("name", market.getName().marketName())
+                .claim("email", market.getMarketEmail().email())
+                .claim("name", market.getMarketName().marketName())
                 .setExpiration(refreshTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
