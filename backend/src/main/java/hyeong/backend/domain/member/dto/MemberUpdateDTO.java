@@ -22,15 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class MemberUpdateDTO {
 
-    @JsonProperty("email")
+    @JsonProperty("member_email")
     @ApiModelProperty(example = "golf@gmail.com")
     private MemberEmail email;
 
-    @JsonProperty("password")
+    @JsonProperty("member_password")
     @ApiModelProperty(example = "3245")
     private MemberPassword password;
 
-    @JsonProperty("nickname")
+    @JsonProperty("member_nickname")
     @ApiModelProperty(example = "golf")
     private MemberNickName nickName;
 

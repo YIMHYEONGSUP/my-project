@@ -1,8 +1,9 @@
 package hyeong.backend.domain.market.service;
 
-import hyeong.backend.domain.market.dto.MarketJoinRequestDTOSerialize;
+import hyeong.backend.domain.market.dto.MarketItemListResponseDTO;
 import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
 import hyeong.backend.domain.market.dto.MarketResponseDTO;
+import hyeong.backend.domain.market.dto.MarketResponseDTOV2;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.exceptions.MarketNotFoundException;
@@ -10,10 +11,11 @@ import hyeong.backend.domain.market.repository.MarketRepository;
 import hyeong.backend.domain.member.exceptions.DuplicateEmailException;
 import hyeong.backend.global.common.TokenDTO;
 import hyeong.backend.global.common.TokenProvider;
-import hyeong.backend.global.common.vo.LocationAddress;
 import hyeong.backend.global.errors.exceptions.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -40,6 +42,8 @@ public class MarketServiceImpl implements MarketService {
 
         market.encode(encoder);
 
+        log.info("market role type = {}" , market.getRoleType());
+
         if (marketRepository.existsByEmail(market.getEmail())) {
             throw new DuplicateEmailException(ErrorCode.EMAIL_DUPLICATION);
         }
@@ -50,6 +54,14 @@ public class MarketServiceImpl implements MarketService {
     @Override
     public MarketResponseDTO findByEmail(MarketEmail email) {
         return MarketResponseDTO.create(marketRepository.findByEmail(email).orElseThrow(() -> {
+            throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
+        }));
+    }
+
+
+    @Override
+    public MarketResponseDTOV2 findByEmailV2(MarketEmail email) {
+        return MarketResponseDTOV2.create(marketRepository.findByEmail(email).orElseThrow(() -> {
             throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
         }));
     }
@@ -67,12 +79,17 @@ public class MarketServiceImpl implements MarketService {
         Authentication authentication = managerBuilder.getObject().authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createTokenMember(updatedMarket.getEmail().email(), authentication);
+        return tokenProvider.createTokenMarket(updatedMarket.getEmail().email(), authentication);
 
     }
 
     @Override
     public void delete(MarketEmail email) {
         marketRepository.deleteByEmail(email);
+    }
+
+    @Override
+    public Page<MarketItemListResponseDTO> marketItemList(MarketEmail marketEmail, Pageable pageable) {
+        return marketRepository.marketItemList(marketEmail, pageable);
     }
 }

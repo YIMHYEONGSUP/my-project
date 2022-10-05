@@ -7,6 +7,7 @@ import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -50,7 +54,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        String[] whiteList = {"/" , "/member/**" , "/market/**"};
+        String[] whiteList = {"/" , "/member/login" , "/market/login"};
 
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -73,6 +77,11 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers(whiteList).permitAll()
+                        .antMatchers(HttpMethod.POST,"/market").permitAll()
+                        .antMatchers(HttpMethod.POST, "/member").permitAll()
+                        .antMatchers("/market/**").hasRole("MARKET")
+                        .antMatchers("/item/**").hasRole("MARKET")
+                        .antMatchers("/member/").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());
@@ -92,6 +101,18 @@ public class SecurityConfig {
     }
 
 
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
 
 
 

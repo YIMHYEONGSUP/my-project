@@ -81,6 +81,7 @@ public class TokenProvider implements InitializingBean {
         long accessTokenEXPTime = accessTokenEXP.getTime();
         long refreshTokenEXPTime = refreshTokenEXP.getTime();
 
+
         Member member = memberRepository.findByEmail(MemberEmail.from(email)).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.USER_NOT_FOUND);
         });
@@ -119,6 +120,8 @@ public class TokenProvider implements InitializingBean {
         long accessTokenEXPTime = accessTokenEXP.getTime();
         long refreshTokenEXPTime = refreshTokenEXP.getTime();
 
+        log.info("expire time = " + now + " " + refreshTokenEXPTime);
+
      Market market = marketRepository.findByEmail(MarketEmail.from(email)).orElseThrow(() -> {
          throw new MarketNotFoundException(ErrorCode.MARKET_NOT_FOUND);
      });
@@ -126,7 +129,7 @@ public class TokenProvider implements InitializingBean {
         String accessToken = Jwts.builder()
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("email", market.getEmail().email())
-                .claim("name", market.getName().name())
+                .claim("name", market.getName().marketName())
                 .setExpiration(accessTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -134,7 +137,7 @@ public class TokenProvider implements InitializingBean {
         String refreshToken = Jwts.builder()
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim("email", market.getEmail().email())
-                .claim("name", market.getName().name())
+                .claim("name", market.getName().marketName())
                 .setExpiration(refreshTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -164,9 +167,11 @@ public class TokenProvider implements InitializingBean {
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
             if (redisService.getBlacklist(token) != null) {
                 throw new UnAuthorizationException(ErrorCode.TOKEN_HAS_BLACKLIST);
             }
+
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");

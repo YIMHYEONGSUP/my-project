@@ -1,5 +1,9 @@
 package hyeong.backend.domain.market.repository;
 
+import hyeong.backend.domain.item.entity.persist.Item;
+import hyeong.backend.domain.item.repository.ItemRepository;
+import hyeong.backend.domain.market.dto.MarketItemListResponseDTO;
+import hyeong.backend.global.given.GivenItem;
 import hyeong.backend.global.given.GivenMarket;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.persist.Review;
@@ -13,14 +17,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
 @Import(TestConfig.class)
 @Slf4j
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
 class MarketRepositoryTest {
 
     @Autowired
@@ -28,6 +36,9 @@ class MarketRepositoryTest {
 
     @Autowired
     MarketRepository marketRepository;
+
+    @Autowired
+    ItemRepository itemRepository;
 
     @Autowired
     ReviewRepository reviewRepository;
@@ -51,11 +62,34 @@ class MarketRepositoryTest {
 
         Review newReview = reviewRepository.save(review);
 
-        log.info("Review = {} , {} , {} , {}" , newReview.getMarket().getName().name() , newReview.getMember().getName().name() , newReview.getRating() , newReview.getComments().comments());
+        log.info("Review = {} , {} , {} , {}" , newReview.getMarket().getName().marketName() , newReview.getMember().getName().name() , newReview.getRating() , newReview.getComments().comments());
 
 
     }
 
+    @Test
+    @DisplayName("get itemList test")
+    public void itemListTest() {
+
+
+        for (int i = 0; i < 100; i++) {
+            Market orderedMarket = GivenMarket.createOrderedMarket(i);
+            marketRepository.save(orderedMarket);
+
+            for (int j = 0; j < 10; j++) {
+                Item orderedItem = GivenItem.createOrderedItem(i , orderedMarket);
+                itemRepository.save(orderedItem);
+            }
+        }
+
+        Page<MarketItemListResponseDTO> itemLists =
+                marketRepository.marketItemList(MarketEmail.from("marketName7"), PageRequest.of(0, 10));
+
+        itemLists.forEach((value)->{
+            System.out.println("value = " + value.getId() + " " + value.getItemName().name());
+        });
+
+    }
 
 
 

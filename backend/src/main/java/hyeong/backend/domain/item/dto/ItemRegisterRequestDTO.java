@@ -21,9 +21,6 @@ import javax.validation.Valid;
 @NoArgsConstructor
 public class ItemRegisterRequestDTO {
 
-    @JsonProperty("market_email")
-    private MarketEmail marketEmail;
-
     @Valid
     @JsonProperty("item_category")
     private ItemCategory itemCategory;
@@ -50,7 +47,6 @@ public class ItemRegisterRequestDTO {
 
     @Builder
     public ItemRegisterRequestDTO(
-            MarketEmail marketEmail,
             ItemCategory itemCategory,
             ItemCode itemCode,
             ItemStatus itemStatus,
@@ -58,7 +54,6 @@ public class ItemRegisterRequestDTO {
             ItemPrice itemPrice,
             ItemQuantity itemQuantity
     ) {
-        this.marketEmail = marketEmail;
         this.itemCategory = itemCategory;
         this.itemCode = itemCode;
         this.itemStatus = itemStatus;

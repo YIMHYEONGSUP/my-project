@@ -1,24 +1,25 @@
 package hyeong.backend.domain.market.service;
 
-import hyeong.backend.domain.market.dto.MarketJoinRequestDTOSerialize;
-import hyeong.backend.domain.market.dto.MarketJoinResponseDTO;
-import hyeong.backend.domain.market.dto.MarketResponseDTO;
+import hyeong.backend.domain.market.dto.*;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
-import hyeong.backend.domain.member.dto.MemberResponseDTO;
-import hyeong.backend.domain.member.entity.persist.Member;
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.global.common.TokenDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface MarketService {
     MarketJoinResponseDTO create(Market market);
 
-    MarketResponseDTO findByEmail(MarketEmail email);
+    MarketResponseDTO findByEmail(MarketEmail marketEmail);
 
-    TokenDTO update(final Market market, final MarketEmail email);
+    MarketResponseDTOV2 findByEmailV2(MarketEmail marketEmail);
 
-    void delete(final MarketEmail email);
+    TokenDTO update(final Market market, final MarketEmail marketEmail);
+
+    void delete(final MarketEmail marketEmail);
+
+    Page<MarketItemListResponseDTO> marketItemList(final MarketEmail marketEmail, final Pageable pageable);
 
 }

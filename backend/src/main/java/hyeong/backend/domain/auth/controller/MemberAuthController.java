@@ -27,8 +27,6 @@ public class MemberAuthController {
         log.info("auth controller requestDto = {}", requestDTO);
         log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail() , requestDTO.getPassword());
 
-
-
         return new ResponseEntity<>(
                 memberAuthService.login(requestDTO.getEmail(), requestDTO.getPassword()), HttpStatus.OK);
     }

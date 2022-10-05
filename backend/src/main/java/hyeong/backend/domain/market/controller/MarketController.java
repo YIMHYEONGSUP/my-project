@@ -4,19 +4,14 @@ import hyeong.backend.domain.market.dto.*;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.service.MarketService;
-import hyeong.backend.domain.member.dto.MemberJoinRequestDTO;
-import hyeong.backend.domain.member.dto.MemberJoinResponseDTO;
-import hyeong.backend.domain.member.dto.MemberResponseDTO;
-import hyeong.backend.domain.member.dto.MemberUpdateDTO;
-import hyeong.backend.domain.member.entity.persist.Member;
-import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.global.common.TokenDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -42,18 +37,25 @@ public class MarketController {
 
         Market market = requestDTO.toEntity();
 
-        URI createMarketURI = URI.create(String.format("/api/v1/markets/%d", market.getId()));
+//        URI createMarketURI = URI.create(String.format("/market/%d", market.getId()));
+        URI createMarketURI = URI.create(String.format("/market/%s", market.getEmail()));
         return ResponseEntity.created(createMarketURI).body(marketService.create(market));
     }
 
-    @PatchMapping
+    @PatchMapping("/{email}")
     @ApiOperation(value = "마켓 회원 수정", notes = "회원 수정 정보를 입력 받아 변경한다.")
     public ResponseEntity<TokenDTO> update(
+            @PathVariable String email,
             @ApiParam(name = "변경된 회원 데이터")
             @Valid @RequestBody MarketUpdateDTO updateDTO) {
+
+        log.info("업데이트 실행 됨");
+
         Market market = updateDTO.toEntity();
 
-        return ResponseEntity.ok(marketService.update(market, MarketEmail.from(market.getEmail().email())));
+        log.info("update market role type = {}" , market.getRoleType());
+
+        return ResponseEntity.ok(marketService.update(market, MarketEmail.from(email)));
     }
 
     @DeleteMapping
@@ -73,5 +75,12 @@ public class MarketController {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
+    @GetMapping("/itemList/{marketName}")
+    @ApiOperation(value = "마켓 아이템 조회", notes = "마켓 아이템 리스트 조회 API")
+    public ResponseEntity<Page<MarketItemListResponseDTO>> itemList(
+            @RequestBody MarketSearchRequestDTO requestDTO
+    ) {
+        return ResponseEntity.ok(marketService.marketItemList(requestDTO.getMarketEmail(), PageRequest.of(0, 10)));
+    }
 
 }

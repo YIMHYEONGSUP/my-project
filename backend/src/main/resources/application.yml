@@ -24,9 +24,9 @@ spring:
 
 # db 설정
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
+    url: jdbc:h2:tcp://localhost/~/hyeong
     username: sa
-    password:
+    password: 1234
     driver-class-name: org.h2.Driver
 
 # Redis 설정

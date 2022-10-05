@@ -21,7 +21,7 @@ import java.util.Objects;
 public class MarketPassword {
 
     @NotNull(message = "비밀번호는 필수 입력 사항입니다.")
-    @Column(unique = true, nullable = false , length = 100)
+    @Column(name = "market_password", nullable = false , length = 100)
     private String password;
 
     public static MarketPassword encode(final String rawPassword, final PasswordEncoder passwordEncoder) {

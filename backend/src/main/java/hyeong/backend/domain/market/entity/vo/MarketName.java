@@ -17,15 +17,15 @@ import java.util.Objects;
 public class MarketName {
 
     @NotNull(message = "이름은 필수 입력사항 입니다.")
-    private String name;
+    private String marketName;
 
     public static MarketName from(final String marketName) {
         return new MarketName(marketName);
     }
 
     @JsonValue
-    public String name() {
-        return name;
+    public String marketName() {
+        return marketName;
     }
 
     @Override
@@ -34,13 +34,13 @@ public class MarketName {
         if(o == null || getClass() != o.getClass()) return false;
 
         MarketName marketName = (MarketName) o;
-        return Objects.equals(name(), marketName.name);
+        return Objects.equals(marketName(), marketName.marketName);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name());
+        return Objects.hash(marketName());
     }
 
 }

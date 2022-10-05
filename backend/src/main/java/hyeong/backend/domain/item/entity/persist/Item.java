@@ -4,37 +4,34 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hyeong.backend.domain.item.entity.vo.*;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     @JsonIgnore
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "market_email" )
+    @OneToOne(cascade = CascadeType.DETACH , fetch = FetchType.LAZY)
+    @JoinColumn(name = "market_email")
     private Market market;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ItemCategory itemCategory;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ItemCode itemCode;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
-
 
     @Embedded
     private ItemName itemName;

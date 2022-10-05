@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.Valid;
@@ -17,23 +18,25 @@ import javax.validation.Valid;
 @AllArgsConstructor
 public class ItemRegisterResponseDTO {
 
-    @JsonProperty("category")
+    @JsonProperty("item_category")
+    @Enumerated(EnumType.STRING)
     private ItemCategory itemCategory;
 
-    @JsonProperty("code")
+    @JsonProperty("item_code")
+    @Enumerated(EnumType.STRING)
     private ItemCode itemCode;
 
-    @JsonProperty("status")
+    @JsonProperty("item_status")
     @Enumerated(EnumType.STRING)
     private ItemStatus itemStatus;
 
-    @JsonProperty("name")
+    @JsonProperty("item_name")
     private ItemName itemName;
 
-    @JsonProperty("price")
+    @JsonProperty("item_price")
     private ItemPrice itemPrice;
 
-    @JsonProperty("quantity")
+    @JsonProperty("item_quantity")
     private ItemQuantity itemQuantity;
 
     public static ItemRegisterResponseDTO from(final Item item) {

@@ -18,7 +18,20 @@ public class GivenItem {
                 .build();
     }
 
-    public static void registerMarket (Market market) {
-        Item.builder().market(market);
+    public static Item createOrderedItem(int index , Market market) {
+
+        Item item = Item.builder()
+                .itemCategory(ItemCategory.FOOD)
+                .itemCode(ItemCode.KOREAN)
+                .itemStatus(ItemStatus.FOR_SALE)
+                .itemName(ItemName.from("고추장 불고기" + index))
+                .itemPrice(ItemPrice.from(13000L))
+                .itemQuantity(ItemQuantity.from(100L))
+                .build();
+
+        item.setMarket(market);
+
+        return item;
     }
+
 }

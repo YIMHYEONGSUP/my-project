@@ -7,6 +7,7 @@ import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.entity.vo.MarketName;
 import hyeong.backend.domain.market.entity.vo.MarketPassword;
+import hyeong.backend.domain.market.entity.vo.MarketStatus;
 import hyeong.backend.global.common.vo.LocationAddress;
 import hyeong.backend.global.common.vo.RoleType;
 import lombok.Builder;
@@ -20,23 +21,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MarketJoinRequestDTOSerialize {
 
-    @JsonProperty("name")
+    @JsonProperty("market_name")
     private MarketName name;
 
-    @JsonProperty("email")
+    @JsonProperty("market_email")
     private MarketEmail email;
 
-    @JsonProperty("password")
+    @JsonProperty("market_password")
     private MarketPassword password;
 
-    @JsonProperty("location_address")
+    @JsonProperty("market_location_address")
     private LocationAddress locationAddress;
 
     @JsonCreator
     public MarketJoinRequestDTOSerialize (
-            @JsonProperty("name") final MarketName name,  @JsonProperty("email") final MarketEmail email,
-            @JsonProperty("password") final MarketPassword password,
-            @JsonProperty("location_address") LocationAddress locationAddress
+            @JsonProperty("market_name") final MarketName name,  @JsonProperty("market_email") final MarketEmail email,
+            @JsonProperty("market_password") final MarketPassword password,
+            @JsonProperty("market_location_address") LocationAddress locationAddress
     ) {
         this.name = name;
         this.email = email;
@@ -51,6 +52,7 @@ public class MarketJoinRequestDTOSerialize {
                 .password(password)
                 .locationAddress(locationAddress)
                 .roleType(RoleType.MARKET)
+                .status(MarketStatus.PREPARED)
                 .build();
     }
 

@@ -1,9 +1,7 @@
 package hyeong.backend.domain.market.entity.persist;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import hyeong.backend.domain.event.entity.persist.Event;
 import hyeong.backend.domain.item.entity.persist.Item;
-import hyeong.backend.domain.market.dto.MarketJoinRequestDTO;
 import hyeong.backend.domain.market.entity.vo.*;
 import hyeong.backend.global.common.vo.RoleType;
 import hyeong.backend.global.common.vo.LocationAddress;
@@ -20,11 +18,22 @@ import java.util.List;
 @NoArgsConstructor
 public class Market {
 
-    @JsonIgnore
     @Id
-    @GeneratedValue
-    @Column(name = "market_id")
-    private Long id;
+    @Embedded
+    @Column(name = "market_email" , unique = true , nullable = false )
+    private MarketEmail email;
+
+    @Embedded
+    @Column(name = "market_password")
+    private MarketPassword password;
+
+    @Embedded
+    @Column(name = "market_name")
+    private MarketName name;
+
+    @Embedded
+    @Column(name = "market_location_address")
+    private LocationAddress locationAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "market_role_type", length = 20)
@@ -34,22 +43,7 @@ public class Market {
     @Column(name = "market_status")
     private MarketStatus status;
 
-    @Embedded
-    @Column(name = "market_name")
-    private MarketName name;
-
-    @Embedded
-    @Column(name = "market_email")
-    private MarketEmail email;
-
-    @Embedded
-    @Column(name = "market_password")
-    private MarketPassword password;
-    @Embedded
-    @Column(name = "market_location_address")
-    private LocationAddress locationAddress;
-
-    @OneToMany(mappedBy = "market" , cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "market" , cascade = CascadeType.ALL)
     @Column(name = "market_item")
     private List<Item> items;
 
@@ -113,6 +107,10 @@ public class Market {
 
     private void changeNickName(MarketName name) {
         this.name = name;
+    }
+
+    public void prepared() {
+        this.status = MarketStatus.PREPARED;
     }
 
 

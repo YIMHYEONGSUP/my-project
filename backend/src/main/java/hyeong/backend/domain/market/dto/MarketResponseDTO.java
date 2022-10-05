@@ -6,11 +6,9 @@ import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.entity.vo.MarketName;
 import hyeong.backend.global.common.vo.LocationAddress;
-import hyeong.backend.global.common.vo.RoleType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.yaml.snakeyaml.error.Mark;
 
 @Getter
 @NoArgsConstructor

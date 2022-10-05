@@ -22,6 +22,18 @@ public class GivenMarket {
                 .build();
     }
 
+    public static Market createOrderedMarket(int index) {
+
+        return Market.builder()
+                .email(MarketEmail.from("market@gmail.com"))
+                .password(MarketPassword.from("1234"))
+                .status(MarketStatus.PREPARED)
+                .name(MarketName.from("marketName"+index))
+                .locationAddress(LocationAddress.from("부천","중동","집주소","12345"))
+                .reviews(null)
+                .events(null)
+                .build();
+    }
 
 
 }

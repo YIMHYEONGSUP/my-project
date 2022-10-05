@@ -58,7 +58,6 @@ public class IntegerationTest {
         System.out.println("marketJoinResponseDTO = " + marketJoinResponseDTO);
 
         Item item = Item.builder()
-                .market(market)
                 .itemCategory(ItemCategory.FOOD)
                 .itemCode(ItemCode.KOREAN)
                 .itemStatus(ItemStatus.FOR_SALE)
@@ -66,6 +65,8 @@ public class IntegerationTest {
                 .itemPrice(ItemPrice.from(13000L))
                 .itemQuantity(ItemQuantity.from(100L))
                 .build();
+
+        item.setMarket(market);
 
         ItemRegisterResponseDTO itemRegisterResponseDTO = itemService.create(item);
         System.out.println("itemRegisterResponseDTO = " + itemRegisterResponseDTO);
@@ -78,7 +79,7 @@ public class IntegerationTest {
 
         EventRegisterResponseDTO eventResponseDTO = eventService.createEvent(event);
         System.out.println("eventResponseDTO = " + eventResponseDTO);
-        System.out.println("eventResponseDTO.getMarket() = " + eventResponseDTO.getMarket().getName().name());
+        System.out.println("eventResponseDTO.getMarket() = " + eventResponseDTO.getMarket().getName().marketName());
 
     }
 }

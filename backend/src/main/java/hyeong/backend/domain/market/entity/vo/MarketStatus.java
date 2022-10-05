@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
-
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 public enum MarketStatus {
 

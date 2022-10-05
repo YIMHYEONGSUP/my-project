@@ -1,5 +1,6 @@
 package hyeong.backend.domain.market.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -23,35 +24,35 @@ import lombok.extern.slf4j.Slf4j;
 @ApiModel
 @JsonTypeName("market")
 @Getter
-@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
+//@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 public class MarketUpdateDTO {
 
-    @JsonProperty("email")
+    @JsonProperty("market_email")
     @ApiModelProperty(example = "gud1313@gmail.com")
     private MarketEmail email;
 
-    @JsonProperty("password")
+    @JsonProperty("market_password")
     @ApiModelProperty(example = "1234")
     private MarketPassword password;
 
-    @JsonProperty("name")
+    @JsonProperty("market_name")
     @ApiModelProperty(example = "Hyeong")
     private MarketName name;
 
-    @JsonProperty("locationAddress")
+    @JsonProperty("market_locationAddress")
     @ApiModelProperty(example = "서울 , 강남 , ㅇㅇ빌딩 , 12345")
     private LocationAddress locationAddress;
 
 
-    private MarketUpdateDTO(MarketEmail email, MarketPassword password, MarketName name , LocationAddress locationAddress){
+    @JsonCreator
+    public MarketUpdateDTO (
+            @JsonProperty("market_email") final MarketEmail email, @JsonProperty("market_password") final MarketPassword password,
+            @JsonProperty("market_name") final MarketName name,  @JsonProperty("market_location_address") LocationAddress locationAddress
+    ) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.locationAddress = locationAddress;
-    }
-
-    public static MarketUpdateDTO from(final Market market) {
-        return new MarketUpdateDTO(market.getEmail(), market.getPassword(), market.getName() , market.getLocationAddress());
     }
 
     public Market toEntity() {

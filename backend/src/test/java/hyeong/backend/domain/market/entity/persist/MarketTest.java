@@ -57,7 +57,7 @@ class MarketTest {
                 .reviews(list)
                 .build();
 
-        log.info(market.getName().name());
+        log.info(market.getName().marketName());
 
         List<Review> reviews = market.getReviews();
         for (Review review : reviews) {
