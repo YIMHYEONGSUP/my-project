@@ -59,7 +59,6 @@ public class MarketController {
         Market market = updateDTO.toEntity();
 
         log.info("update market role type = {}" , market.getMarketRoleType());
-
         return ResponseEntity.ok(marketService.update(market, MarketEmail.from(email)));
     }
 
@@ -87,6 +86,15 @@ public class MarketController {
     ) {
         // temporarily page request
         return ResponseEntity.ok(marketService.marketItemList(requestDTO.getMarketEmail(), PageRequest.of(0, 10)));
+    }
+
+    @GetMapping("/marketList")
+    @ApiOperation(value = "지역 내 마켓 조회" , notes = "지역 내 마켓 조회 API")
+    public ResponseEntity<Page<MarketListResponseDTO>> marketList(
+            @RequestBody LocationCondition locationCondition
+    ) {
+        // temporarily page request
+        return ResponseEntity.ok(marketService.marketList(locationCondition, PageRequest.of(0, 10)));
     }
 
 }

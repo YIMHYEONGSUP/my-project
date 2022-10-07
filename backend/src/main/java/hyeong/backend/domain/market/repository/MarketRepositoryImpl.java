@@ -59,9 +59,6 @@ public class MarketRepositoryImpl implements MarketRepositoryCustom{
     @Override
     public Page<MarketListResponseDTO> marketListInLocation(LocationCondition locationCondition, Pageable pageable) {
 
-        String city = locationCondition.getCity();
-        String town = locationCondition.getTown();
-
         QueryResults<MarketListResponseDTO> result = query.select(new QMarketListResponseDTO(
                         market.marketName.as("market_name"),
                         market.marketStatus.as("market_status"),

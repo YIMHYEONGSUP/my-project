@@ -5,17 +5,17 @@
         <div id="mainContent"> 메인컨텐츠 </div>
         <div id="sideContent">
 
-            <UserInformation></UserInformation>
+            <InformationTab></InformationTab>
             
         </div>
     </div>
 </template>
   
   <script>
-import UserInformation from './UserInformation.vue';
+import InformationTab from './informationTabs/InformationTab.vue';
   export default {
     name: "Content",
-    components: { UserInformation }
+    components: { InformationTab }
 }
   </script>
   

@@ -1,10 +1,18 @@
 <template>
+  
+  <v-container>
+      <v-card>
+        <input v-model="id" placeholder="아이디"/>
+        <input v-model="password" type="search" placeholder="패스워드"/>
+      </v-card>
+            <v-btn v-model="button">로그인</v-btn>
 
-        <div id="userInformation">
-            <router-link to="/">일반 로그인</router-link> |
-            <router-link to="/about">마켓 로그인</router-link>
-        </div>
-
+            <v-card>
+              <v-btn v-model="button" to="/join">회원가입</v-btn>
+             <v-btn v-model="button" to="/find">아이디 | 비밀번호 찾기</v-btn>
+            </v-card>
+  </v-container>
+        
 </template>
   
   <script>
@@ -27,7 +35,6 @@
         height: 250px;
         margin: auto;
         border: 3px solid black;
-        background-color: rebeccapurple;
 
     }
 

@@ -7,6 +7,7 @@ import hyeong.backend.global.jwt.JwtAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,6 +15,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +27,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.Filter;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Slf4j
@@ -32,6 +37,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private static String[] webIgnoreList = {"/static/**","/resources/**","/css/**","/js/**","/h2-console","/images/**","/swagger-ui/**",
+            "/v3/api-docs", "/configuration/ui", "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui.html", "/webjars/**","/swagger/**"};
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -45,16 +54,29 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().antMatchers(webIgnoreList);
+//    }
+
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        String[] webIgnoreList = {"/static/**","/resources/**","/css/**","/js/**","/h2-console","/images/**","/swagger-ui/**"};
-        return (web) -> web.ignoring().antMatchers(webIgnoreList);
+    @Order(0)
+    public SecurityFilterChain resources(HttpSecurity http) throws Exception {
+        return http.requestMatchers(matchers -> matchers
+                        .antMatchers(webIgnoreList))
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll())
+                .requestCache(RequestCacheConfigurer::disable)
+                .securityContext(AbstractHttpConfigurer::disable)
+                .sessionManagement(AbstractHttpConfigurer::disable)
+                .build();
     }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        String[] whiteList = {"/" , "/member/login" , "/market/login"};
+        String[] whiteList = {"/" , "/member/login" , "/market/login" , "/swagger-resources/**", "/swagger-ui/**", "/swagger-ui"};
 
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -75,7 +97,7 @@ public class SecurityConfig {
 
                 .and()
 
-                .authorizeHttpRequests((authz) -> authz
+                .authorizeRequests((authz) -> authz
                         .antMatchers(whiteList).permitAll()
                         .antMatchers(HttpMethod.POST,"/market").permitAll()
                         .antMatchers(HttpMethod.POST, "/member").permitAll()

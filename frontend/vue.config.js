@@ -1,9 +1,11 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   lintOnSave: false,
-  
   transpileDependencies: true,
-  outputDir:"../backend/src/main/resources/static", // 빌드 타겟 디렉토리
+
+  // 빌드 타겟 디렉토리
+  outputDir:"../backend/src/main/resources/static",
+
   devServer: {
     proxy: {
       '/api': {
@@ -12,5 +14,11 @@ module.exports = defineConfig({
         changeOrigin: true // cross origin 허용
       }
     }
+  },
+
+  pluginOptions: {
+    vuetify: {
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
   }
 })

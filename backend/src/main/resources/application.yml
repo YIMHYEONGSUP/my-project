@@ -42,6 +42,7 @@ spring:
 
 # jpa 설정
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create-drop
     properties:
