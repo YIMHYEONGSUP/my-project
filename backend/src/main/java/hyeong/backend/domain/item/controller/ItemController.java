@@ -44,21 +44,7 @@ public class ItemController {
 
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<?> itemList(
-            @AuthenticationPrincipal User user
-    ) {
 
-        ResponseEntity<?> result = null;
-
-        try{
-            result = new ResponseEntity<>(itemService.itemList() , HttpStatus.OK);
-        }catch (Exception e){
-
-        }
-
-        return result;
-    }
 
 
 

@@ -3,7 +3,7 @@ package hyeong.backend.domain.item.entity.persist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hyeong.backend.domain.item.entity.vo.*;
 import hyeong.backend.domain.market.entity.persist.Market;
-import hyeong.backend.domain.market.entity.vo.MarketEmail;
+import hyeong.backend.domain.order.entity.persist.Orders;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +23,9 @@ public class Item {
     @OneToOne(cascade = CascadeType.DETACH , fetch = FetchType.LAZY)
     @JoinColumn(name = "market_email")
     private Market market;
+
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Orders order;
 
     @Enumerated(EnumType.STRING)
     private ItemCategory itemCategory;
@@ -45,6 +48,8 @@ public class Item {
 
     @Builder
     public Item(
+            Market market,
+            Orders order,
             ItemCategory itemCategory,
             ItemCode itemCode,
             ItemStatus itemStatus,
@@ -52,6 +57,8 @@ public class Item {
             ItemPrice itemPrice,
             ItemQuantity itemQuantity
     ) {
+        this.market = market;
+        this.order = order;
         this.itemCategory = itemCategory;
         this.itemCode = itemCode;
         this.itemStatus = itemStatus;

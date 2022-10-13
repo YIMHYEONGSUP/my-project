@@ -37,9 +37,9 @@ public class MemberController {
 
         log.info("controller request = {}" , requestDTO.getEmail());
         Member member = requestDTO.toEntity();
-        log.info("controller member = {}" , member.getEmail());
+        log.info("controller member = {}" , member.getMemberEmail());
 
-        URI createdMemberURI = URI.create(String.format("/api/v1/member/%d", member.getId()));
+        URI createdMemberURI = URI.create(String.format("/api/v1/member/%s", member.getMemberEmail().memberEmail()));
         return ResponseEntity.created(createdMemberURI).body(memberService.create(member));
     }
 
@@ -50,7 +50,7 @@ public class MemberController {
             @Valid @RequestBody MemberUpdateDTO updateDTO) {
         Member member = updateDTO.toEntity();
 
-        return ResponseEntity.ok(memberService.update(member, MemberEmail.from(member.getEmail().email())));
+        return ResponseEntity.ok(memberService.update(member, MemberEmail.from(member.getMemberEmail().memberEmail())));
     }
 
     @DeleteMapping

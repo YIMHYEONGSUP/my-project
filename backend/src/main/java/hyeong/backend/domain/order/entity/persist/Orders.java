@@ -1,6 +1,7 @@
 package hyeong.backend.domain.order.entity.persist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.order.entity.vo.OrderNumber;
@@ -9,13 +10,14 @@ import hyeong.backend.global.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
-//@Entity 미완
+@Entity
+@Getter
 @NoArgsConstructor
-public class Order extends BaseTimeEntity {
+public class Orders {
 
     @JsonIgnore
     @Id
@@ -23,13 +25,16 @@ public class Order extends BaseTimeEntity {
     @Column(name = "order_id")
     private Long id;
 
-    @OneToMany(mappedBy = "market_name")
-    @Column(name = "order_market_name")
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JoinColumn(name = "market_email" )
     private Market market;
 
-    @OneToMany(mappedBy = "member_nickname")
-    @Column(name = "order_member_id")
+    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_email" )
     private Member member;
+
+    @OneToMany(mappedBy = "order")
+    private List<Item> itemList;
 
     @Embedded
     @Column(name = "order_number")
@@ -40,14 +45,16 @@ public class Order extends BaseTimeEntity {
     private OrderStatus orderStatus;
 
     @Builder
-    public Order (
+    public Orders(
             Market market,
             Member member,
+            List<Item> itemList,
             OrderNumber orderNumber,
             OrderStatus orderStatus
     ) {
         this.market = market;
         this.member = member;
+        this.itemList = itemList;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
     }

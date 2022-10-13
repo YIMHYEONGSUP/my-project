@@ -26,7 +26,7 @@ public class MarketAuthController {
     public ResponseEntity<TokenDTO> login(@Valid @RequestBody MarketLoginRequestDTO requestDTO , HttpServletResponse response) {
 
         log.info("auth controller requestDto = {}", requestDTO);
-        log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail() , requestDTO.getPassword());
+        log.info("auth controller requestDto email = {} , password = {}" , requestDTO.getEmail().email() , requestDTO.getPassword().password());
 
         return new ResponseEntity<>(
                 marketAuthService.login(requestDTO.getEmail(), requestDTO.getPassword()), HttpStatus.OK);

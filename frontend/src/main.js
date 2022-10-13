@@ -5,7 +5,8 @@ import store from './store'
 
 import axios from 'axios'
 
-import vuetify from './plugins/vuetify'
+import vuetify from '@/plugins/vuetify'
+
 
 
 // createApp(App).use(store).use(router).use(axios).mount('#app')

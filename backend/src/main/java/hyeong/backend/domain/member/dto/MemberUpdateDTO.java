@@ -41,14 +41,14 @@ public class MemberUpdateDTO {
     }
 
     public static MemberUpdateDTO from(final Member member) {
-        return new MemberUpdateDTO(member.getEmail(), member.getPassword(), member.getNickname());
+        return new MemberUpdateDTO(member.getMemberEmail(), member.getMemberPassword(), member.getMemberNickName());
     }
 
     public Member toEntity() {
         return Member.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickName)
+                .memberEmail(email)
+                .memberPassword(password)
+                .memberNickName(nickName)
                 .build();
     }
 }

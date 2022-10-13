@@ -15,15 +15,15 @@ import java.util.Objects;
 public class MemberName {
 
     @NotNull(message = "이름은 필수 입력사항 입니다.")
-    private String name;
+    private String memberName;
 
     public static MemberName from(final String memberName) {
         return new MemberName(memberName);
     }
 
     @JsonValue
-    public String name() {
-        return name;
+    public String memberName() {
+        return memberName;
     }
 
     @Override
@@ -32,12 +32,12 @@ public class MemberName {
         if(o == null || getClass() != o.getClass()) return false;
 
         MemberName memberName = (MemberName) o;
-        return Objects.equals(name(), memberName.name);
+        return Objects.equals(memberName(), memberName.memberName);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name());
+        return Objects.hash(memberName());
     }
 }

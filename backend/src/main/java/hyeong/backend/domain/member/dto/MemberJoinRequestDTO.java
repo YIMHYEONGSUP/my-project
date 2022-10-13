@@ -49,16 +49,16 @@ public class MemberJoinRequestDTO {
     }
 
     public static MemberJoinRequestDTO from(final Member member) {
-        return new MemberJoinRequestDTO(member.getEmail() , member.getPassword(), member.getName() , member.getNickname());
+        return new MemberJoinRequestDTO(member.getMemberEmail() , member.getMemberPassword(), member.getMemberName() , member.getMemberNickName());
     }
 
     public Member toEntity() {
         return Member.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .nickname(nickname)
-                .roleType(RoleType.USER)
+                .memberEmail(email)
+                .memberPassword(password)
+                .memberName(name)
+                .memberNickName(nickname)
+                .memberRoleType(RoleType.USER)
                 .build();
     }
 

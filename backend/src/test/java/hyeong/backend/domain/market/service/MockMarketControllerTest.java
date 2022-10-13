@@ -1,11 +1,15 @@
 package hyeong.backend.domain.market.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hyeong.backend.domain.item.service.ItemService;
 import hyeong.backend.domain.market.dto.MarketSearchRequestDTO;
+import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTOV2;
+import hyeong.backend.domain.market.entity.vo.MarketStatus;
 import hyeong.backend.global.given.GivenMarket;
 import hyeong.backend.domain.market.controller.MarketController;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.global.configs.SecurityConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +27,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,7 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
         })
 @AutoConfigureMockMvc
+@Slf4j
 class MockMarketControllerTest {
+
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,10 +53,15 @@ class MockMarketControllerTest {
     @MockBean
     private MarketService marketService;
 
+    @MockBean
+    private ItemService itemService;
+
+
 
     @Autowired
     private WebApplicationContext wac;
 
+    static Market market = GivenMarket.createMarket();
 
 
     @BeforeEach
@@ -61,7 +75,6 @@ class MockMarketControllerTest {
     }
 
 
-    static Market market = GivenMarket.createMarket();
 
 
     @Test
@@ -119,6 +132,8 @@ class MockMarketControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andReturn();
     }
+
+
 
 
 

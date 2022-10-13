@@ -1,6 +1,7 @@
 package hyeong.backend.domain.market.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import hyeong.backend.domain.market.entity.persist.Market;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -42,5 +43,11 @@ public class MarketEmail implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(email());
+    }
+
+    public Market toEntity() {
+        return Market.builder()
+                .marketEmail(from(marketEmail))
+                .build();
     }
 }

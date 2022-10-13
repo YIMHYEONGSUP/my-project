@@ -27,18 +27,18 @@ class MemberTest {
     public void create() {
 
         Member newMember = Member.builder()
-                .email(MemberEmail.from("gud1313@naver.com"))
-                .password(MemberPassword.from("1234"))
-                .name(MemberName.from("임형섭"))
-                .nickname(MemberNickName.from("별명"))
+                .memberEmail(MemberEmail.from("gud1313@naver.com"))
+                .memberPassword(MemberPassword.from("1234"))
+                .memberName(MemberName.from("임형섭"))
+                .memberNickName(MemberNickName.from("별명"))
                 .build();
 
-        MemberEmail email = newMember.getEmail();
-        System.out.println("email = " + email.email());
+        MemberEmail email = newMember.getMemberEmail();
+        System.out.println("email = " + email.memberEmail());
 
         memberService.create(newMember);
         MemberResponseDTO foundMember = memberService.findByEmail(MemberEmail.from("gud1313@naver.com"));
-        System.out.println(foundMember.getEmail().email());
+        System.out.println(foundMember.getEmail().memberEmail());
 
 
 

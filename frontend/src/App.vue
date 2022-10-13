@@ -1,8 +1,9 @@
 <template>
 
   <v-app>
-
-    <Header></Header>
+    <v-app-bar app>
+      <Header></Header>
+    </v-app-bar>
 
     <v-main>
       <Content>

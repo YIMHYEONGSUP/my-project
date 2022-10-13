@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService{
 
         member.encode(encoder);
 
-        if (memberRepository.existsByEmail(member.getEmail())) {
+        if (memberRepository.existsByMemberEmail(member.getMemberEmail())) {
             throw new DuplicateEmailException(ErrorCode.EMAIL_DUPLICATION);
         }
         return MemberJoinResponseDTO.from(memberRepository.save(member));
@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public MemberResponseDTO findByEmail(MemberEmail email) {
-        Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> {
+        Member findMember = memberRepository.findByMemberEmail(email).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         });
         return MemberResponseDTO.create(findMember);
@@ -52,22 +52,22 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public TokenDTO update(Member member, MemberEmail email) {
-        Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> {
+        Member findMember = memberRepository.findByMemberEmail(email).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         });
 
         Member updatedMember = findMember.update(member, encoder);
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(updatedMember.getEmail().email(), member.getPassword().password());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(updatedMember.getMemberEmail().memberEmail(), member.getMemberPassword().memberPassword());
 
         Authentication authentication = managerBuilder.getObject().authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return tokenProvider.createTokenMember(updatedMember.getEmail().email(), authentication);
+        return tokenProvider.createTokenMember(updatedMember.getMemberEmail().memberEmail(), authentication);
 
     }
 
     public void delete(final MemberEmail email) {
-        memberRepository.deleteByEmail(email);
+        memberRepository.deleteByMemberEmail(email);
     }
 }

@@ -3,6 +3,7 @@ package hyeong.backend.domain.market.entity.persist;
 import hyeong.backend.domain.event.entity.persist.Event;
 import hyeong.backend.domain.item.entity.persist.Item;
 import hyeong.backend.domain.market.entity.vo.*;
+import hyeong.backend.domain.order.entity.persist.Orders;
 import hyeong.backend.global.common.vo.RoleType;
 import hyeong.backend.global.common.vo.LocationAddress;
 import lombok.Builder;
@@ -46,6 +47,10 @@ public class Market {
     @OneToMany(mappedBy = "market" , cascade = CascadeType.ALL)
     @Column(name = "market_item")
     private List<Item> itemList;
+
+    @OneToMany(mappedBy = "market" , cascade = CascadeType.ALL)
+    @Column(name = "market_order")
+    private List<Orders> orderList;
 
     @OneToMany(mappedBy = "market")
     @Column(name = "market_reviews")
@@ -109,8 +114,8 @@ public class Market {
         this.marketName = name;
     }
 
-    public void prepared() {
-        this.marketStatus = MarketStatus.PREPARED;
+    public void changeStatus(MarketStatus marketStatus) {
+        this.marketStatus = marketStatus;
     }
 
 

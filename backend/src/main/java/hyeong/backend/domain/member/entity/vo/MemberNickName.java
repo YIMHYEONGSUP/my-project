@@ -13,20 +13,20 @@ import java.util.Objects;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberNickName {
 
-    private String nickname;
+    private String memberNickname;
 
-    public static MemberNickName from(String nickname) {
-        return new MemberNickName(nickname);
+    public static MemberNickName from(String memberNickname) {
+        return new MemberNickName(memberNickname);
     }
 
     @JsonValue
-    public String nickname() {
-        return nickname;
+    public String memberNickname() {
+        return memberNickname;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nickname());
+        return Objects.hash(memberNickname());
     }
 
     @Override
@@ -34,6 +34,6 @@ public class MemberNickName {
         if(this == o) return true;
         if(this != o || getClass() != o.getClass())return false;
         MemberNickName memberNickName = (MemberNickName) o;
-        return Objects.equals(nickname(), memberNickName.nickname);
+        return Objects.equals(memberNickname(), memberNickName.memberNickname);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface MarketRepository extends JpaRepository<Market, Long> , MarketRepositoryCustom{
+public interface MarketRepository extends JpaRepository<Market, MarketEmail> , MarketRepositoryCustom{
 
     Optional<Market> findByMarketEmail(final MarketEmail email);
 

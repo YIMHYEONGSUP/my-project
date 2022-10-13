@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> , MemberRepositoryCustom{
-    Optional<Member> findByEmail(final MemberEmail email);
+public interface MemberRepository extends JpaRepository<Member, MemberEmail> , MemberRepositoryCustom{
+    Optional<Member> findByMemberEmail(final MemberEmail email);
 
-    boolean existsByEmail(final MemberEmail email);
+    boolean existsByMemberEmail(final MemberEmail email);
 
-     void deleteByEmail(final MemberEmail email);
+     void deleteByMemberEmail(final MemberEmail email);
 }

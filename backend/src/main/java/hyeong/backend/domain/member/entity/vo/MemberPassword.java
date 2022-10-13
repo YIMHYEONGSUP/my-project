@@ -21,8 +21,8 @@ import java.util.Objects;
 public class MemberPassword {
 
     @NotNull(message = "비밀번호는 필수 입력 사항입니다.")
-    @Column(unique = true, nullable = false , length = 100)
-    private String password;
+    @Column(nullable = false , length = 100)
+    private String memberPassword;
 
     public static MemberPassword encode(final String rawPassword, final PasswordEncoder passwordEncoder) {
         validateBlank(rawPassword);
@@ -36,7 +36,7 @@ public class MemberPassword {
     }
 
     public void matches(final MemberPassword other, final PasswordEncoder passwordEncoder) {
-        if (!passwordEncoder.matches(other.password(), this.password)) {
+        if (!passwordEncoder.matches(other.memberPassword(), this.memberPassword)) {
             throw new PasswordMissMatchException(ErrorCode.PASSWORD_MISS_MATCH);
         }
     }
@@ -47,13 +47,13 @@ public class MemberPassword {
     }
 
     @JsonValue
-    public String password (){
-        return password;
+    public String memberPassword (){
+        return memberPassword;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(password());
+        return Objects.hash(memberPassword());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class MemberPassword {
         if(this == o) return true;
         if(this != o || getClass() != o.getClass())return false;
         MemberPassword memberPassword = (MemberPassword) o;
-        return Objects.equals(password(), memberPassword.password);
+        return Objects.equals(memberPassword(), memberPassword.memberPassword);
     }
 
 }

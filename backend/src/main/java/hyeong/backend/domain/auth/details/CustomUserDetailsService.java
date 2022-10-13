@@ -36,16 +36,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return !marketRepository.findByMarketEmail(MarketEmail.from(email)).isEmpty() ? marketRepository.findByMarketEmail(MarketEmail.from(email))
                 .map(this::createdUserDetailsMarket)
-                .orElseThrow(() -> new MarketNotFoundException((ErrorCode.MARKET_NOT_FOUND))) : memberRepository.findByEmail(MemberEmail.from(email))
+                .orElseThrow(() -> new MarketNotFoundException((ErrorCode.MARKET_NOT_FOUND))) : memberRepository.findByMemberEmail(MemberEmail.from(email))
                 .map(this::createdUserDetailsMember)
                 .orElseThrow(() -> new MemberNotFoundException((ErrorCode.MEMBER_NOT_FOUND)));
     }
 
     private UserDetails createdUserDetailsMember(Member member) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + member.getRoleType());
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + member.getMemberRoleType());
 
-        return new User(member.getEmail().email(),
-                member.getPassword().password(),
+        return new User(member.getMemberEmail().memberEmail(),
+                member.getMemberPassword().memberPassword(),
                 Collections.singleton(grantedAuthority));
     }
 

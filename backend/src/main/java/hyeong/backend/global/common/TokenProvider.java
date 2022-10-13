@@ -82,22 +82,22 @@ public class TokenProvider implements InitializingBean {
         long refreshTokenEXPTime = refreshTokenEXP.getTime();
 
 
-        Member member = memberRepository.findByEmail(MemberEmail.from(email)).orElseThrow(() -> {
+        Member member = memberRepository.findByMemberEmail(MemberEmail.from(email)).orElseThrow(() -> {
             throw new MemberNotFoundException(ErrorCode.USER_NOT_FOUND);
         });
 
         String accessToken = Jwts.builder()
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim("email", member.getEmail().email())
-                .claim("nickname", member.getNickname().nickname())
+                .claim("email", member.getMemberEmail().memberEmail())
+                .claim("nickname", member.getMemberNickName().memberNickname())
                 .setExpiration(accessTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .claim(AUTHORITIES_KEY, authorities)
-                .claim("email", member.getEmail().email())
-                .claim("nickname", member.getNickname().nickname())
+                .claim("email", member.getMemberEmail().memberEmail())
+                .claim("nickname", member.getMemberNickName().memberNickname())
                 .setExpiration(refreshTokenEXP)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();

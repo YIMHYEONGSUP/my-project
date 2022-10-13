@@ -14,11 +14,11 @@ import javax.validation.Valid;
 public class MemberLoginRequestDTO {
 
     @Valid
-    @JsonProperty("email")
+    @JsonProperty("member_email")
     private MemberEmail email;
 
     @Valid
-    @JsonProperty("password")
+    @JsonProperty("member_password")
     private MemberPassword password;
 
 

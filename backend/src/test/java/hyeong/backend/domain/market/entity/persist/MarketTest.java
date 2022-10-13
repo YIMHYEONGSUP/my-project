@@ -31,11 +31,11 @@ class MarketTest {
 
 
         Member newMember = Member.builder()
-                .email(MemberEmail.from("gud1313@naver.com"))
-                .password(MemberPassword.from("1234"))
-                .name(MemberName.from("임형섭"))
-                .nickname(MemberNickName.from("별명"))
-                .roleType(RoleType.USER)
+                .memberEmail(MemberEmail.from("gud1313@naver.com"))
+                .memberPassword(MemberPassword.from("1234"))
+                .memberName(MemberName.from("임형섭"))
+                .memberNickName(MemberNickName.from("별명"))
+                .memberRoleType(RoleType.USER)
                 .reviews(null)
                 .build();
 

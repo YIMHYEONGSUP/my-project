@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Header,Footer,content
+    component: content
   },
   {
     path: '/join',
@@ -18,7 +18,8 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import('../views/JoinView.vue')
     
-  }
+  },
+
 ]
 
 const router = createRouter({

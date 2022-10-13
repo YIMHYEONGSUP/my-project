@@ -6,13 +6,9 @@ import hyeong.backend.domain.member.entity.persist.Member;
 import hyeong.backend.domain.member.entity.vo.MemberEmail;
 import hyeong.backend.domain.member.entity.vo.MemberName;
 import hyeong.backend.domain.member.entity.vo.MemberNickName;
-import hyeong.backend.domain.member.entity.vo.MemberPassword;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import javax.persistence.Embedded;
 
 @Getter
 @NoArgsConstructor
@@ -41,8 +37,8 @@ public class MemberResponseDTO {
 
 
     public static MemberResponseDTO create(final Member member) {
-        return new MemberResponseDTO(member.getEmail(), member.getName(),
-                member.getNickname());
+        return new MemberResponseDTO(member.getMemberEmail(), member.getMemberName(),
+                member.getMemberNickName());
     }
 
 }

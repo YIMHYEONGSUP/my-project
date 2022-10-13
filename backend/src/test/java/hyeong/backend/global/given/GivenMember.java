@@ -19,11 +19,11 @@ public class GivenMember {
     public static Member createMember() {
 
         return Member.builder()
-                .email(USER_EMAIL)
-                .password(USER_PASSWORD)
-                .name(USER_NAME)
-                .roleType(RoleType.USER)
-                .nickname(USER_NICK_NAME)
+                .memberEmail(USER_EMAIL)
+                .memberPassword(USER_PASSWORD)
+                .memberName(USER_NAME)
+                .memberRoleType(RoleType.USER)
+                .memberNickName(USER_NICK_NAME)
                 .build();
     }
 
@@ -31,11 +31,11 @@ public class GivenMember {
                             final MemberNickName nickname) {
 
         return Member.builder()
-                .email(email)
-                .password(password)
-                .name(name)
-                .roleType(RoleType.USER)
-                .nickname(nickname)
+                .memberEmail(email)
+                .memberPassword(password)
+                .memberName(name)
+                .memberRoleType(RoleType.USER)
+                .memberNickName(nickname)
                 .build();
     }
 }

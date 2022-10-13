@@ -5,8 +5,11 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyeong.backend.domain.auth.config.WithMockCustomerMarket;
-import hyeong.backend.domain.item.dto.ItemSearchCondition;
+import hyeong.backend.domain.item.dto.ItemResponseDTO;
+import hyeong.backend.domain.item.dto.QItemResponseDTO;
 import hyeong.backend.domain.item.entity.persist.Item;
+import hyeong.backend.domain.item.entity.persist.QItem;
+import hyeong.backend.domain.item.entity.vo.*;
 import hyeong.backend.domain.item.repository.ItemRepository;
 import hyeong.backend.domain.market.dto.MarketListResponseDTO;
 import hyeong.backend.domain.market.dto.QMarketListResponseDTO;
@@ -35,13 +38,14 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
+import static hyeong.backend.domain.item.entity.persist.QItem.*;
 import static hyeong.backend.domain.market.entity.persist.QMarket.*;
 
 @DataJpaTest(excludeFilters = {
@@ -85,6 +89,19 @@ class MarketRepositoryTest {
             marketRepository.save(orderedMarket);
             itemRepository.save(orderedItem);
 
+            for (int j = 0; j < 5; j++) {
+                Item item = Item.builder()
+                        .itemCategory(ItemCategory.FOOD)
+                        .itemCode(ItemCode.KOREAN)
+                        .itemStatus(ItemStatus.FOR_SALE)
+                        .itemName(ItemName.from("고추장 불고기" + j+i))
+                        .itemPrice(ItemPrice.from(13000L))
+                        .itemQuantity(ItemQuantity.from(100L))
+                        .build();
+                item.setMarket(orderedMarket);
+                itemRepository.save(item);
+            }
+
         }
 
   
@@ -112,7 +129,7 @@ class MarketRepositoryTest {
 
         Review newReview = reviewRepository.save(review);
 
-        log.info("Review = {} , {} , {} , {}" , newReview.getMarket().getMarketName().marketName() , newReview.getMember().getName().name() , newReview.getRating() , newReview.getComments().comments());
+        log.info("Review = {} , {} , {} , {}" , newReview.getMarket().getMarketName().marketName() , newReview.getMember().getMemberName().memberName() , newReview.getRating() , newReview.getComments().comments());
 
 
     }
@@ -166,6 +183,48 @@ class MarketRepositoryTest {
 
 
     }
+
+    @Test
+    @DisplayName("변경감지 테스트")
+    public void dirtyChecking() {
+
+        String MARKET_EMAIL = "market0@gmail.com";
+
+        Optional<Market> findMarket = marketRepository.findByMarketEmail(MarketEmail.from(MARKET_EMAIL));
+        Market market = findMarket.get();
+        market.changeStatus(MarketStatus.OPEN);
+
+        em.flush();
+        em.clear();
+
+        Optional<Market> findMarket2 = marketRepository.findByMarketEmail(MarketEmail.from(MARKET_EMAIL));
+        Market market2 = findMarket2.get();
+        log.info("마켓 상태 = {}",market2.getMarketStatus());
+
+        List<ItemResponseDTO> findItem = query.select(new QItemResponseDTO(
+                        QItem.item.itemCategory,
+                        QItem.item.itemCode,
+                        QItem.item.itemStatus,
+                        QItem.item.itemName,
+                        QItem.item.itemPrice,
+                        QItem.item.itemQuantity
+                )).from(QItem.item)
+                .where(MarketEmailEq(MARKET_EMAIL))
+                .fetch();
+
+        findItem.forEach(itemResponseDTO -> {
+            itemResponseDTO.setItemStatus(ItemStatus.FOR_SALE);
+        });
+
+
+    }
+
+    private BooleanExpression MarketEmailEq(String marketEmail) {
+        return StringUtils.hasText(marketEmail) ? market.marketEmail.marketEmail.eq(marketEmail) : null;
+    }
+
+
+    // methods
 
     private BooleanExpression marketTownEq(String town) {
         return StringUtils.hasText(town) ? market.marketLocationAddress.town.eq(town) : null;

@@ -124,13 +124,13 @@ class AuthControllerTest {
     public void loginTest() throws Exception {
 
         MemberLoginRequestDTO loginRequestDTO = MemberLoginRequestDTO.builder()
-                .email(member.getEmail())
-                .password(member.getPassword())
+                .email(member.getMemberEmail())
+                .password(member.getMemberPassword())
                 .build();
 
         String body = mapper.writeValueAsString(loginRequestDTO);
 
-        TokenDTO tokenDTO = memberAuthService.login(member.getEmail(), member.getPassword());
+        TokenDTO tokenDTO = memberAuthService.login(member.getMemberEmail(), member.getMemberPassword());
 
 //        when(memberAuthService.authorize(any(), any())).thenReturn(tokenDTO);
         when(memberAuthService.login(any(), any())).thenReturn(tokenDTO);
@@ -166,7 +166,7 @@ class AuthControllerTest {
 
         MemberJoinResponseDTO mock = when(memberService.create(member)).getMock();
 
-        System.out.println("mock = " + mock.getEmail().email());
+        System.out.println("mock = " + mock.getEmail().memberEmail());
 
     }
 

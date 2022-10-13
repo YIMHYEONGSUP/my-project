@@ -18,11 +18,11 @@ import javax.validation.Valid;
 public class MarketLoginRequestDTO {
 
     @Valid
-    @JsonProperty("email")
+    @JsonProperty("market_email")
     private MarketEmail email;
 
     @Valid
-    @JsonProperty("password")
+    @JsonProperty("market_password")
     private MarketPassword password;
 
 

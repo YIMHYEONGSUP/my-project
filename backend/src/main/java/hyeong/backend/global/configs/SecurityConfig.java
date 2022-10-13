@@ -29,7 +29,10 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.Filter;
 
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.web.servlet.function.RequestPredicates.POST;
 
 @Slf4j
 @EnableWebSecurity
@@ -76,8 +79,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        String[] whiteList = {"/" , "/member/login" , "/market/login" , "/swagger-resources/**", "/swagger-ui/**", "/swagger-ui"};
-
+        String[] whiteList = {"/" , "/swagger-resources/**", "/swagger-ui/**", "/swagger-ui"};
+        String[] joinLogin = {"/member", "/market","/member/login" , "/market/login"};
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(customMemberDetailService).passwordEncoder(passwordEncoder());
@@ -99,8 +102,8 @@ public class SecurityConfig {
 
                 .authorizeRequests((authz) -> authz
                         .antMatchers(whiteList).permitAll()
-                        .antMatchers(HttpMethod.POST,"/market").permitAll()
-                        .antMatchers(HttpMethod.POST, "/member").permitAll()
+                        .antMatchers(HttpMethod.POST, joinLogin).permitAll()
+
                         .antMatchers("/market/**").hasRole("MARKET")
                         .antMatchers("/item/**").hasRole("MARKET")
                         .antMatchers("/member/").hasRole("USER")

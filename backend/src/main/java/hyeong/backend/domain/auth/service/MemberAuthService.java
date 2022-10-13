@@ -36,8 +36,8 @@ public class MemberAuthService {
     private long refreshTokenValidityInMilliseconds;
 
     public TokenDTO login (final MemberEmail memberEmail, final MemberPassword memberPassword) {
-        final String email = memberEmail.email();
-        final String password = memberPassword.password();
+        final String email = memberEmail.memberEmail();
+        final String password = memberPassword.memberPassword();
 
         log.info("email = {}" , email);
         log.info("password = {}" , password);

@@ -1,11 +1,11 @@
 package hyeong.backend.domain.market.controller;
 
+import hyeong.backend.domain.item.dto.ItemResponseDTO;
+import hyeong.backend.domain.item.entity.persist.Item;
+import hyeong.backend.domain.item.service.ItemService;
 import hyeong.backend.domain.market.dto.*;
 import hyeong.backend.domain.market.dto.item.MarketItemListResponseDTO;
-import hyeong.backend.domain.market.dto.marketUser.MarketJoinRequestDTOSerialize;
-import hyeong.backend.domain.market.dto.marketUser.MarketJoinResponseDTO;
-import hyeong.backend.domain.market.dto.marketUser.MarketResponseDTO;
-import hyeong.backend.domain.market.dto.marketUser.MarketUpdateDTO;
+import hyeong.backend.domain.market.dto.marketUser.*;
 import hyeong.backend.domain.market.entity.persist.Market;
 import hyeong.backend.domain.market.entity.vo.MarketEmail;
 import hyeong.backend.domain.market.service.MarketService;
@@ -18,11 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @Api("마켓 관리 Api")
 @RestController
@@ -32,6 +35,7 @@ import java.net.URI;
 public class MarketController {
 
     private final MarketService marketService;
+    private final ItemService itemService;
 
     @PostMapping
     @ApiParam(name = "마켓 회원 가입 데이터 전달 DTO")
@@ -48,6 +52,7 @@ public class MarketController {
     }
 
     @PatchMapping("/{email}")
+    @ApiParam(name = "마켓 회원 변경 데이터 전달 DTO")
     @ApiOperation(value = "마켓 회원 수정", notes = "회원 수정 정보를 입력 받아 변경한다.")
     public ResponseEntity<TokenDTO> update(
             @PathVariable String email,
@@ -63,6 +68,7 @@ public class MarketController {
     }
 
     @DeleteMapping
+    @ApiParam(name = "마켓 회원 삭제 전달 DTO")
     @ApiOperation(value = "마켓 회원 삭제", notes = "마켓 회원 정보를 삭제한다.")
     public ResponseEntity<Void> delete() {
         marketService.delete(MarketEmail.from(getEmail()));
@@ -96,5 +102,20 @@ public class MarketController {
         // temporarily page request
         return ResponseEntity.ok(marketService.marketList(locationCondition, PageRequest.of(0, 10)));
     }
+
+    @PatchMapping("/open/{marketEmail}")
+    @ApiOperation(value = "마켓 오픈" , notes = "마켓 오픈 API ")
+    public ResponseEntity<MarketControlResponseDTO> marketOpen(
+            @PathVariable("marketEmail") String marketEmail,
+            @AuthenticationPrincipal User user,
+            @RequestBody MarketControlRequestDTO requestDTO
+            ) {
+
+        log.info("마켓 오픈 컨트롤러 = {} , {} , {}", user.getUsername() ,requestDTO.getMarketStatus() , requestDTO.getPreparedItemList());
+        return ResponseEntity.ok(
+                marketService.marketStatus(MarketEmail.from(user.getUsername()),
+                        requestDTO.getMarketStatus(), requestDTO.getPreparedItemList()));
+    }
+
 
 }

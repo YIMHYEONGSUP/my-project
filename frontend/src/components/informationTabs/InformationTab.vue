@@ -3,8 +3,8 @@
     <div id="InformationTab">
     
         <v-tabs>
-            <v-tab @Click="toggleTab('UserInformation')">Item One</v-tab>
-            <v-tab @Click="toggleTab('MarketInformation')">Item Two</v-tab>
+            <v-tab @Click="toggleTab('UserInformation')">일반회원 로그인</v-tab>
+            <v-tab @Click="toggleTab('MarketInformation')">마켓회원 로그인</v-tab>
         </v-tabs>
         <component :is="currentTab" keep-alive/>
 

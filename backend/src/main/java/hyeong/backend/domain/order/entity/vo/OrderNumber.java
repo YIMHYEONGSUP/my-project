@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
+import java.time.LocalDate;
 
 @Embeddable
 @NoArgsConstructor
@@ -15,6 +18,9 @@ import javax.persistence.GeneratedValue;
 @EqualsAndHashCode
 public class OrderNumber {
 
+    @CreatedDate
+    @Column(name = "release_time")
+    private LocalDate releaseTime;
     @GeneratedValue
     private Long orderNumber;
 
