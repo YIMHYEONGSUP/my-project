@@ -1,46 +1,14 @@
-# my-project
+# 플레이스 정보 확인 , 예약 서비스 ( 지역 내 유동 인구 , 가게 내 현재 인원 등의 정보를 제공하고 예약과 추가 서비스 제공 )
+
+# 서비스목록
+...
+
+# 구현 현황
+
+
 
 # ERD DIAGRAM
-https://www.erdcloud.com/p/vd3hiFJaTLxQQwoyY
+## https://www.erdcloud.com/p/vd3hiFJaTLxQQwoyY
 
-2022 09 06 tue 
-vue + spring setting
 
-2022 09 07 wed
-setting jpa + queryDsl + spring security + jwt + redis + h2 + swagger
 
-2022 09 08 thu
-test
-
-2022 09 09 fri
-test jwt -> reset -> reset
-
-2022 09 10 sat
-setting config
-
-2022 09 11 sun
-complete mock test
-
-2022 09 12 mon
-change plan open api -> simple example
-
-2022 09 13 tue
-created new entity -> market , review , manager
-
-2022 09 14 wed
-begin mock test cant pass test
-
-2022 09 15 thu
-practicing mock test for TDD pass the test (create , update , delete) 
-
-2022 09 16 fri
-complete postman test (create , login , reissue , delete)
-
-2022 09 17 sat
-complete test login flow ( login -> reissue -> logout -> reissue ( failure ) -> login ( success )
-
-2022 09 18 sun
-complete market mock test
-
-2022 10 05 wed
-setting detailed vue
